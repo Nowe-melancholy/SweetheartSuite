@@ -1,0 +1,6 @@
+{
+    "go.lintOnSave": "package",
+    "go.toolsEnvVars": {
+        "GOFLAGS": "-tags=SweetheartSuite"
+    }
+}
