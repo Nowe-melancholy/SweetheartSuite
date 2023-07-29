@@ -1,16 +1,13 @@
 package user
 
 import (
-	"SweetheartSuite/v2/pkg/ToDo/internal/domain/todolist"
-
 	"github.com/google/uuid"
 )
 
 type User struct {
-	id       string
-	name     string
-	gender   string
-	toDoList *todolist.ToDoList
+	id     string
+	name   string
+	gender string
 }
 
 func NewUser(name string, gender string) *User {

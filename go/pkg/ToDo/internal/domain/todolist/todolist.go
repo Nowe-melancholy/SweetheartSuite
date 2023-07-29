@@ -7,24 +7,28 @@ import (
 )
 
 type ToDoList struct {
-	ID        string
-	ToDoItems []*todoitem.ToDoItem
+	id        string
+	toDoItems []*todoitem.ToDoItem
+}
+
+func (t *ToDoList) ID() string {
+	return t.id
 }
 
 func NewToDoList() *ToDoList {
 	return &ToDoList{
-		ID: uuid.New().String(),
+		id: uuid.New().String(),
 	}
 }
 
 func (t *ToDoList) AddItem(item *todoitem.ToDoItem) {
-	t.ToDoItems = append(t.ToDoItems, item)
+	t.toDoItems = append(t.toDoItems, item)
 }
 
 func (t *ToDoList) RemoveItem(item *todoitem.ToDoItem) {
-	for i, v := range t.ToDoItems {
-		if v.ID == item.ID {
-			t.ToDoItems = append(t.ToDoItems[:i], t.ToDoItems[i+1:]...)
+	for i, v := range t.toDoItems {
+		if v.ID() == item.ID() {
+			t.toDoItems = append(t.toDoItems[:i], t.toDoItems[i+1:]...)
 			break
 		}
 	}

@@ -22,13 +22,13 @@ func NewAddToDoItemUsecase(toDoListRepo todolist.ToDoListIRepository, toDoItemRe
 	}
 }
 
-func (usecase *addToDoItemUsecase) Execute(ctx context.Context, userID string, title string, description string) error {
-	toDoList, err := usecase.toDoListRepo.FindByUserID(ctx, userID)
+func (usecase *addToDoItemUsecase) Execute(ctx context.Context, userId string, title string, description string) error {
+	toDoList, err := usecase.toDoListRepo.FindByUserID(ctx, userId)
 	if err != nil {
 		return err
 	}
 
-	toDoItem := todoitem.NewToDoItem(title, description, toDoList.ID)
+	toDoItem := todoitem.NewToDoItem(title, description, toDoList.ID())
 
 	err = usecase.toDoItemRepo.Save(ctx, toDoItem)
 	if err != nil {

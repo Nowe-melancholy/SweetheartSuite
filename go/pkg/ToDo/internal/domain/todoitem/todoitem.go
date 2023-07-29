@@ -5,28 +5,32 @@ import (
 )
 
 type ToDoItem struct {
-	ID          string
-	Title       string
-	Description string
-	IsDone      bool
-	ToDoListID  string
+	id          string
+	title       string
+	description string
+	isDone      bool
+	toDoListId  string
 }
 
-func NewToDoItem(title string, description string, toDoListID string) *ToDoItem {
+func (t *ToDoItem) ID() string {
+	return t.id
+}
+
+func NewToDoItem(title string, description string, toDoListId string) *ToDoItem {
 	return &ToDoItem{
-		ID:          uuid.New().String(),
-		Title:       title,
-		Description: description,
-		IsDone:      false,
-		ToDoListID:  toDoListID,
+		id:          uuid.New().String(),
+		title:       title,
+		description: description,
+		isDone:      false,
+		toDoListId:  toDoListId,
 	}
 }
 
 func (t *ToDoItem) EditItem(title string, description string) {
-	t.Title = title
-	t.Description = description
+	t.title = title
+	t.description = description
 }
 
 func (t *ToDoItem) MarkAsDone() {
-	t.IsDone = true
+	t.isDone = true
 }
