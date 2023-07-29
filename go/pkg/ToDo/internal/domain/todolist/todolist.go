@@ -9,15 +9,21 @@ import (
 type ToDoList struct {
 	id        string
 	toDoItems []*todoitem.ToDoItem
+	coupleId  string
 }
 
 func (t *ToDoList) ID() string {
 	return t.id
 }
 
-func NewToDoList() *ToDoList {
+func NewToDoList(
+	toDoItems []*todoitem.ToDoItem,
+	coupleId string,
+) *ToDoList {
 	return &ToDoList{
-		id: uuid.New().String(),
+		id:        uuid.New().String(),
+		toDoItems: toDoItems,
+		coupleId:  coupleId,
 	}
 }
 
