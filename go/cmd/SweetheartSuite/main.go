@@ -1,11 +1,20 @@
 package main
 
 import (
+	"SweetheartSuite/v2/pkg/User/migration"
+	"fmt"
+	"log"
 	"net/http"
 )
 
 func main() {
+	fmt.Println("Starting Sweetheart Suite...")
+
+	migration.Init()
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		log.Println("Request received")
+
 		w.Write([]byte(`
 			<!DOCTYPE html>
 			<html>

@@ -10,6 +10,7 @@ services:
       - "8080:8080"
     depends_on:
       - db
+    tty: true
   db:
     image: postgres:latest
     restart: always
@@ -21,6 +22,18 @@ services:
       - "5432:5432"
     volumes:
       - dbdata:/var/lib/postgresql/data
-
+  pgadmin:
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmindata:/var/lib/pgadmin4/storage
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@example.com
+      PGADMIN_DEFAULT_PASSWORD: root
+      TZ: Asia/Tokyo
+    depends_on:
+      - db
+    ports:
+      - "5050:80"
 volumes:
   dbdata:
+  pgadmindata:

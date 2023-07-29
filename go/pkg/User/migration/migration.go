@@ -1,22 +1,26 @@
-package userinfra
+package migration
 
 import (
 	"SweetheartSuite/v2/pkg/User/internal/infra"
+	"fmt"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
 
-func init() {
-	dsn := "postgres:postgres@localhost:5432/sweetheartdb?sslmode=disable"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+func Init() {
+	fmt.Println("Initializing database...")
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN: "host=db user=postgres password=postgres dbname=sweetheartdb port=5432 sslmode=disable TimeZone=Asia/Shanghai",
+	}), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   "user.",
 			SingularTable: false,
 		},
 	})
 	if err != nil {
+		fmt.Println(err)
 		panic(err)
 	}
 
