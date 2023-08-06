@@ -1,7 +1,8 @@
 package main
 
 import (
-	"SweetheartSuite/v2/pkg/User/migration"
+	toDoMigration "SweetheartSuite/v2/pkg/ToDo/migration"
+	userMigration "SweetheartSuite/v2/pkg/User/migration"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,7 +11,11 @@ import (
 func main() {
 	fmt.Println("Starting Sweetheart Suite...")
 
-	migration.Init()
+	fmt.Println("Initializing todo schema...")
+	toDoMigration.Init()
+
+	fmt.Println("Initializing user schema...")
+	userMigration.Init()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Request received")
