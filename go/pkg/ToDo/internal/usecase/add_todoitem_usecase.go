@@ -1,13 +1,15 @@
-package addtodoitemusecase
+package usecase
 
 import (
 	"SweetheartSuite/v2/pkg/ToDo/internal/domain/todoitem"
 	"SweetheartSuite/v2/pkg/ToDo/internal/domain/todolist"
 	"context"
+
+	"github.com/google/uuid"
 )
 
 type AddToDoItemUsecase interface {
-	Execute(ctx context.Context, userID string, title string, description string) error
+	Execute(ctx context.Context, userID string, title string, description string) (itemId string, err error)
 }
 
 type addToDoItemUsecase struct {
@@ -22,18 +24,23 @@ func NewAddToDoItemUsecase(toDoListRepo todolist.ToDoListIRepository, toDoItemRe
 	}
 }
 
-func (usecase *addToDoItemUsecase) Execute(ctx context.Context, userId string, title string, description string) error {
-	toDoList, err := usecase.toDoListRepo.FindByUserID(ctx, userId)
+func (usecase *addToDoItemUsecase) Execute(
+	ctx context.Context,
+	coupleId string,
+	title string,
+	description string,
+) (itemId string, err error) {
+	toDoList, err := usecase.toDoListRepo.FindByCoupleID(coupleId)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	toDoItem := todoitem.NewToDoItem(title, description, toDoList.ID())
+	toDoItem := todoitem.NewToDoItem(uuid.NewString(), title, description, toDoList.ID())
 
-	err = usecase.toDoItemRepo.Save(ctx, toDoItem)
+	err = usecase.toDoItemRepo.Create(toDoItem)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return toDoItem.ID(), nil
 }

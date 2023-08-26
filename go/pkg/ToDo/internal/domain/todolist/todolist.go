@@ -1,13 +1,8 @@
 package todolist
 
-import (
-	"github.com/google/uuid"
-)
-
 type ToDoList struct {
-	id          string
-	toDoItemIds []string
-	coupleId    string
+	id       string
+	coupleId string
 }
 
 func (t *ToDoList) ID() string {
@@ -15,12 +10,11 @@ func (t *ToDoList) ID() string {
 }
 
 func NewToDoList(
-	toDoItemIds []string,
+	id string,
 	coupleId string,
 ) *ToDoList {
 	return &ToDoList{
-		id:          uuid.New().String(),
-		toDoItemIds: toDoItemIds,
-		coupleId:    coupleId,
+		id:       id,
+		coupleId: coupleId,
 	}
 }

@@ -1,9 +1,5 @@
 package todoitem
 
-import (
-	"github.com/google/uuid"
-)
-
 type ToDoItem struct {
 	id          string
 	title       string
@@ -16,9 +12,25 @@ func (t *ToDoItem) ID() string {
 	return t.id
 }
 
-func NewToDoItem(title string, description string, toDoListId string) *ToDoItem {
+func (t *ToDoItem) Title() string {
+	return t.title
+}
+
+func (t *ToDoItem) Description() string {
+	return t.description
+}
+
+func (t *ToDoItem) IsDone() bool {
+	return t.isDone
+}
+
+func (t *ToDoItem) ToDoListID() string {
+	return t.toDoListId
+}
+
+func NewToDoItem(id string, title string, description string, toDoListId string) *ToDoItem {
 	return &ToDoItem{
-		id:          uuid.New().String(),
+		id:          id,
 		title:       title,
 		description: description,
 		isDone:      false,

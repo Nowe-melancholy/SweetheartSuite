@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package SweetheartSuite.v2;
+
+option go_package = "SweetheartSuite/v2/pkg/ToDo/presenter";
+
+service ToDo {
+    rpc AddToDoItem(AddRequest) returns (AddResponse) {}
+    // rpc ReadToDoItems(ReadRequest) returns (ReadResponse) {}
+    // rpc UpdateToDoItem(UpdateRequest) returns (UpdateResponse) {}
+    // rpc DeleteToDoItems(DeleteRequest) returns (DeleteResponse) {}
+}
+
+message AddRequest {
+    string userId = 1;
+    string title = 2;
+    string description = 3;
+}
+
+message AddResponse {
+    string itemId = 1;
+}
+
+// message ReadRequest {
+//     repeated string id = 1;
+// }
+
+// message ReadResponseArray {
+//     string id = 1;
+//     string title = 2;
+//     string description = 3;
+// }
+
+// message ReadResponse {
+//     repeated ReadResponseArray todos = 1;
+// }
+
+// message UpdateRequest {
+//     string id = 1;
+//     string title = 2;
+//     string description = 3;
+// }
+
+// message UpdateResponse {
+//     string id = 1;
+// }
+
+// message DeleteRequest {
+//     repeated string id = 1;
+// }
+
+// message DeleteResponse {
+//     repeated string id = 1;
+// }
