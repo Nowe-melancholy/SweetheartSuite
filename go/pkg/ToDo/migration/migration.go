@@ -38,7 +38,7 @@ func Init() {
 		panic(err)
 	}
 
-	db.AutoMigrate(&infra.ToDoItem{}, &infra.ToDoList{})
+	db.AutoMigrate(&infra.Item{}, &infra.List{})
 
 	fmt.Println("Database initialized")
 }

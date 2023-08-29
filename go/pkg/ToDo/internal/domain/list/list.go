@@ -1,19 +1,19 @@
-package todolist
+package list
 
-type ToDoList struct {
+type List struct {
 	id       string
 	coupleId string
 }
 
-func (t *ToDoList) ID() string {
+func (t *List) ID() string {
 	return t.id
 }
 
-func NewToDoList(
+func NewList(
 	id string,
 	coupleId string,
-) *ToDoList {
-	return &ToDoList{
+) *List {
+	return &List{
 		id:       id,
 		coupleId: coupleId,
 	}

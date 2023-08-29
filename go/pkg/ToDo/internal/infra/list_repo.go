@@ -1,7 +1,7 @@
 package infra
 
 import (
-	"SweetheartSuite/v2/pkg/ToDo/internal/domain/todolist"
+	"SweetheartSuite/v2/pkg/ToDo/internal/domain/list"
 	"fmt"
 
 	"gorm.io/driver/postgres"
@@ -9,19 +9,19 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-type ToDoList struct {
+type List struct {
 	ID       string
 	CoupleID string
 }
 
-type toDoListRepository struct {
+type listRepository struct {
 }
 
-func NewToDoListRepository() todolist.ToDoListIRepository {
-	return &toDoListRepository{}
+func NewListRepository() list.ListIRepository {
+	return &listRepository{}
 }
 
-func (repo *toDoListRepository) FindByCoupleID(coupleId string) (*todolist.ToDoList, error) {
+func (repo *listRepository) FindByCoupleID(coupleId string) (*list.List, error) {
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN: "host=db user=postgres password=postgres dbname=sweetheartdb port=5432 sslmode=disable TimeZone=Asia/Shanghai",
 	}), &gorm.Config{
@@ -35,14 +35,14 @@ func (repo *toDoListRepository) FindByCoupleID(coupleId string) (*todolist.ToDoL
 		return nil, err
 	}
 
-	var result ToDoList
+	var result List
 	res := db.First(&result, "couple_id = ?", coupleId)
 
 	if res.Error != nil {
 		return nil, res.Error
 	}
 
-	toDoList := todolist.NewToDoList(result.ID, result.CoupleID)
+	list := list.NewList(result.ID, result.CoupleID)
 
-	return toDoList, nil
+	return list, nil
 }

@@ -1,7 +1,7 @@
 package infra
 
 import (
-	"SweetheartSuite/v2/pkg/ToDo/internal/domain/todoitem"
+	"SweetheartSuite/v2/pkg/ToDo/internal/domain/item"
 	"fmt"
 
 	"gorm.io/driver/postgres"
@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-type ToDoItem struct {
+type Item struct {
 	ID          string
 	Title       string
 	Description string
@@ -17,20 +17,20 @@ type ToDoItem struct {
 	ListID      string
 }
 
-type toDoItemRepository struct {
+type itemRepository struct {
 }
 
-func NewToDoItemRepository() todoitem.ToDoItemIRepository {
-	return &toDoItemRepository{}
+func NewItemRepository() item.ItemIRepository {
+	return &itemRepository{}
 }
 
-func (repo *toDoItemRepository) Create(toDoItem *todoitem.ToDoItem) error {
-	toDoItemData := ToDoItem{
-		ID:          toDoItem.ID(),
-		Title:       toDoItem.Title(),
-		Description: toDoItem.Description(),
-		IsDone:      toDoItem.IsDone(),
-		ListID:      toDoItem.ToDoListID(),
+func (repo *itemRepository) Create(item *item.Item) error {
+	itemData := Item{
+		ID:          item.ID(),
+		Title:       item.Title(),
+		Description: item.Description(),
+		IsDone:      item.IsDone(),
+		ListID:      item.ListID(),
 	}
 
 	db, err := gorm.Open(postgres.New(postgres.Config{
@@ -46,7 +46,7 @@ func (repo *toDoItemRepository) Create(toDoItem *todoitem.ToDoItem) error {
 		return err
 	}
 
-	db.Create(&toDoItemData)
+	db.Create(&itemData)
 
 	return nil
 }
