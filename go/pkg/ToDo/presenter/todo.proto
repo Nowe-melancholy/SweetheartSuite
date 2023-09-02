@@ -10,7 +10,7 @@ service ToDo {
 }
 
 message AddItemRequest {
-    string userId = 1;
+    string coupleId = 1;
     string title = 2;
     string description = 3;
 }

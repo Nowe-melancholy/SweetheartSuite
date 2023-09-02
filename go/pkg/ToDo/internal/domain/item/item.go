@@ -1,5 +1,7 @@
 package item
 
+import "errors"
+
 type Item struct {
 	id          string
 	title       string
@@ -28,14 +30,24 @@ func (t *Item) ListID() string {
 	return t.listId
 }
 
-func NewItem(id string, title string, description string, ListId string) *Item {
+func NewItem(id string, title string, description string, listId string) (*Item, error) {
+	if id == "" {
+		return nil, errors.New("id is required")
+	}
+	if title == "" {
+		return nil, errors.New("title is required")
+	}
+	if listId == "" {
+		return nil, errors.New("listId is required")
+	}
+
 	return &Item{
 		id:          id,
 		title:       title,
 		description: description,
 		isDone:      false,
-		listId:      ListId,
-	}
+		listId:      listId,
+	}, nil
 }
 
 func (t *Item) EditItem(title string, description string) {

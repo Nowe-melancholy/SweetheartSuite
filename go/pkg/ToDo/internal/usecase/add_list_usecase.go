@@ -25,7 +25,10 @@ func (usecase *addListUsecase) Execute(
 	ctx context.Context,
 	coupleId string,
 ) (listId string, err error) {
-	list := list.NewList(uuid.NewString(), coupleId)
+	list, err := list.NewList(uuid.NewString(), coupleId)
+	if err != nil {
+		return "", err
+	}
 
 	err = usecase.listRepo.Create(list)
 	if err != nil {

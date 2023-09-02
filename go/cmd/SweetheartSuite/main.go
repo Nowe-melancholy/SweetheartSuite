@@ -26,7 +26,7 @@ func main() {
 
 	fmt.Println("Starting server...")
 
-	todoPresenter := toDoPresenter.NewToDoPresenter()
+	todoPresenter := toDoPresenter.NewPresenter()
 
 	mux := http.NewServeMux()
 	reflector := grpcreflect.NewStaticReflector(
