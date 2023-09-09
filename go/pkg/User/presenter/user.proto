@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package SweetheartSuite.v2;
+
+option go_package = "SweetheartSuite/v2/pkg/User/presenter";
+
+service User {
+    rpc AddUser(AddUserRequest) returns (AddUserResponse) {}
+}
+
+enum Gender {
+    UNDEFINED = 0;
+    MAN = 1;
+    WOMAN = 2;
+}
+
+message AddUserRequest {
+    string name = 1;
+    Gender gender = 2;
+}
+
+message AddUserResponse {
+    string userId = 1;
+}
