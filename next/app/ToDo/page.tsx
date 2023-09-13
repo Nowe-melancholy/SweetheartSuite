@@ -1,4 +1,10 @@
 import { grid } from '../../styled-system/patterns';
+import { credentials } from '@grpc/grpc-js';
+import { ToDoClient } from '../../types/pkg/ToDo/presenter/todo';
+
+const fetch = async () => {
+  const client = new ToDoClient('localhost:8080', credentials.createInsecure());
+};
 
 export default function ToDo() {
   return (

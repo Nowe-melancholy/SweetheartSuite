@@ -8,9 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "panda codegen",
-    "grpc-codegen": "protoc --proto_path=../go --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --ts_proto_out=./types ../go/pkg/main.proto"
+    "grpc-codegen": "protoc --ts_proto_opt=outputServices=grpc-js --ts_proto_opt=enumsAsLiterals=true --proto_path=../go --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --ts_proto_out=./types ../go/pkg/main.proto"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.9.2",
     "@types/node": "20.6.0",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",

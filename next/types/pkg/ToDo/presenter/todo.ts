@@ -1,4 +1,16 @@
 /* eslint-disable */
+import {
+  CallOptions,
+  ChannelCredentials,
+  Client,
+  ClientOptions,
+  ClientUnaryCall,
+  handleUnaryCall,
+  makeGenericClientConstructor,
+  Metadata,
+  ServiceError,
+  UntypedServiceImplementation,
+} from "@grpc/grpc-js";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "SweetheartSuite.v2";
@@ -281,37 +293,70 @@ export const AddListResponse = {
   },
 };
 
-export interface ToDo {
-  AddItem(request: AddItemRequest): Promise<AddItemResponse>;
-  AddList(request: AddListRequest): Promise<AddListResponse>;
+export type ToDoService = typeof ToDoService;
+export const ToDoService = {
+  addItem: {
+    path: "/SweetheartSuite.v2.ToDo/AddItem",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: AddItemRequest) => Buffer.from(AddItemRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => AddItemRequest.decode(value),
+    responseSerialize: (value: AddItemResponse) => Buffer.from(AddItemResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => AddItemResponse.decode(value),
+  },
+  addList: {
+    path: "/SweetheartSuite.v2.ToDo/AddList",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: AddListRequest) => Buffer.from(AddListRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => AddListRequest.decode(value),
+    responseSerialize: (value: AddListResponse) => Buffer.from(AddListResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => AddListResponse.decode(value),
+  },
+} as const;
+
+export interface ToDoServer extends UntypedServiceImplementation {
+  addItem: handleUnaryCall<AddItemRequest, AddItemResponse>;
+  addList: handleUnaryCall<AddListRequest, AddListResponse>;
 }
 
-export const ToDoServiceName = "SweetheartSuite.v2.ToDo";
-export class ToDoClientImpl implements ToDo {
-  private readonly rpc: Rpc;
-  private readonly service: string;
-  constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || ToDoServiceName;
-    this.rpc = rpc;
-    this.AddItem = this.AddItem.bind(this);
-    this.AddList = this.AddList.bind(this);
-  }
-  AddItem(request: AddItemRequest): Promise<AddItemResponse> {
-    const data = AddItemRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "AddItem", data);
-    return promise.then((data) => AddItemResponse.decode(_m0.Reader.create(data)));
-  }
-
-  AddList(request: AddListRequest): Promise<AddListResponse> {
-    const data = AddListRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "AddList", data);
-    return promise.then((data) => AddListResponse.decode(_m0.Reader.create(data)));
-  }
+export interface ToDoClient extends Client {
+  addItem(
+    request: AddItemRequest,
+    callback: (error: ServiceError | null, response: AddItemResponse) => void,
+  ): ClientUnaryCall;
+  addItem(
+    request: AddItemRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: AddItemResponse) => void,
+  ): ClientUnaryCall;
+  addItem(
+    request: AddItemRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: AddItemResponse) => void,
+  ): ClientUnaryCall;
+  addList(
+    request: AddListRequest,
+    callback: (error: ServiceError | null, response: AddListResponse) => void,
+  ): ClientUnaryCall;
+  addList(
+    request: AddListRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: AddListResponse) => void,
+  ): ClientUnaryCall;
+  addList(
+    request: AddListRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: AddListResponse) => void,
+  ): ClientUnaryCall;
 }
 
-interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
-}
+export const ToDoClient = makeGenericClientConstructor(ToDoService, "SweetheartSuite.v2.ToDo") as unknown as {
+  new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): ToDoClient;
+  service: typeof ToDoService;
+};
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 

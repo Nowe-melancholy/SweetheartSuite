@@ -1,14 +1,23 @@
 /* eslint-disable */
+import {
+  CallOptions,
+  ChannelCredentials,
+  Client,
+  ClientOptions,
+  ClientUnaryCall,
+  handleUnaryCall,
+  makeGenericClientConstructor,
+  Metadata,
+  ServiceError,
+  UntypedServiceImplementation,
+} from "@grpc/grpc-js";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "SweetheartSuite.v2";
 
-export enum Gender {
-  UNDEFINED = 0,
-  MAN = 1,
-  WOMAN = 2,
-  UNRECOGNIZED = -1,
-}
+export const Gender = { UNDEFINED: 0, MAN: 1, WOMAN: 2, UNRECOGNIZED: -1 } as const;
+
+export type Gender = typeof Gender[keyof typeof Gender];
 
 export function genderFromJSON(object: any): Gender {
   switch (object) {
@@ -182,29 +191,45 @@ export const AddUserResponse = {
   },
 };
 
-export interface User {
-  AddUser(request: AddUserRequest): Promise<AddUserResponse>;
+export type UserService = typeof UserService;
+export const UserService = {
+  addUser: {
+    path: "/SweetheartSuite.v2.User/AddUser",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: AddUserRequest) => Buffer.from(AddUserRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => AddUserRequest.decode(value),
+    responseSerialize: (value: AddUserResponse) => Buffer.from(AddUserResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => AddUserResponse.decode(value),
+  },
+} as const;
+
+export interface UserServer extends UntypedServiceImplementation {
+  addUser: handleUnaryCall<AddUserRequest, AddUserResponse>;
 }
 
-export const UserServiceName = "SweetheartSuite.v2.User";
-export class UserClientImpl implements User {
-  private readonly rpc: Rpc;
-  private readonly service: string;
-  constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || UserServiceName;
-    this.rpc = rpc;
-    this.AddUser = this.AddUser.bind(this);
-  }
-  AddUser(request: AddUserRequest): Promise<AddUserResponse> {
-    const data = AddUserRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "AddUser", data);
-    return promise.then((data) => AddUserResponse.decode(_m0.Reader.create(data)));
-  }
+export interface UserClient extends Client {
+  addUser(
+    request: AddUserRequest,
+    callback: (error: ServiceError | null, response: AddUserResponse) => void,
+  ): ClientUnaryCall;
+  addUser(
+    request: AddUserRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: AddUserResponse) => void,
+  ): ClientUnaryCall;
+  addUser(
+    request: AddUserRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: AddUserResponse) => void,
+  ): ClientUnaryCall;
 }
 
-interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
-}
+export const UserClient = makeGenericClientConstructor(UserService, "SweetheartSuite.v2.User") as unknown as {
+  new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): UserClient;
+  service: typeof UserService;
+};
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
