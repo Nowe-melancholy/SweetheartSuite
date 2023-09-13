@@ -1,6 +1,9 @@
-import '../styles/globals.css'
-import Home from './home/page'
+import { css } from '../styled-system/css';
 
-const Root = () => { return <Home />}
-
-export default Root
+export default function Root() {
+  return (
+    <>
+      <h1>SweetHeartSuite</h1>
+    </>
+  );
+}

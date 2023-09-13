@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "rimraf .next && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "panda codegen"
+    "prepare": "panda codegen",
+    "grpc-codegen": "protoc --proto_path=../go --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --ts_proto_out=./types ../go/pkg/main.proto"
   },
   "dependencies": {
     "@types/node": "20.6.0",
@@ -19,10 +20,12 @@
     "next-auth": "^4.23.1",
     "react": "^18.2.0",
     "react-dom": "18.2.0",
+    "ts-proto": "^1.157.0",
     "typescript": "5.2.2"
   },
   "devDependencies": {
     "@pandacss/dev": "^0.14.0",
-    "@types/babel__core": "^7.20.1"
+    "@types/babel__core": "^7.20.1",
+    "rimraf": "^5.0.1"
   }
 }
