@@ -11,7 +11,7 @@ RUN go mod download
 COPY . ./
 
 # ビルドします。CGOを無効にし、Goの静的バイナリを作成します。
-RUN CGO_ENABLED=0 go build -o /SweetheartSuite ./cmd/SweetheartSuite/main.go
+RUN CGO_ENABLED=0 go build -o /SweetheartSuite ./pkg/main.go
 
 # 実行ステージ
 FROM alpine:3.14
