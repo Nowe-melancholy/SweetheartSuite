@@ -10,6 +10,7 @@ type Item struct {
 	Title       string
 	Description string
 	IsDone      bool
+	DoneDate	string
 	ListID      string
 }
 
@@ -26,6 +27,7 @@ func (repo *itemRepository) Create(item *item.Item) error {
 		Title:       item.Title(),
 		Description: item.Description(),
 		IsDone:      item.IsDone(),
+		DoneDate:    item.DoneDate(),
 		ListID:      item.ListID(),
 	}
 

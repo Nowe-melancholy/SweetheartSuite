@@ -7,6 +7,7 @@ type Item struct {
 	title       string
 	description string
 	isDone      bool
+	doneDate   string
 	listId      string
 }
 
@@ -24,6 +25,10 @@ func (t *Item) Description() string {
 
 func (t *Item) IsDone() bool {
 	return t.isDone
+}
+
+func (t *Item) DoneDate() string {
+	return t.doneDate
 }
 
 func (t *Item) ListID() string {
@@ -55,6 +60,9 @@ func (t *Item) EditItem(title string, description string) {
 	t.description = description
 }
 
-func (t *Item) MarkAsDone() {
+func (t *Item) MarkAsDone(
+	doneDate string,
+) {
 	t.isDone = true
+	t.doneDate = doneDate
 }

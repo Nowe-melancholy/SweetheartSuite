@@ -1,8 +1,8 @@
 package presenter
 
 import (
-	"SweetheartSuite/v2/pkg/ToDo/internal/usecase"
 	"SweetheartSuite/v2/pkg/ToDo/internal/infra"
+	"SweetheartSuite/v2/pkg/ToDo/internal/usecase"
 	"context"
 	"fmt"
 
@@ -19,16 +19,23 @@ type Presenter interface {
 		ctx context.Context,
 		req *connect.Request[AddListRequest],
 	) (*connect.Response[AddListResponse], error)
+
+	GetItems(
+		ctx context.Context,
+		req *connect.Request[GetItemsRequest],
+	)(*connect.Response[GetItemsResponse], error)
 }
 
 type presenter struct {
 	addItemUsecase usecase.AddItemUsecase
 	addListUsecase usecase.AddListUsecase
+	getItemsUsecase usecase.GetItemsUsecase
 }
 
 func NewPresenter() Presenter {
 	listRepo := infra.NewListRepository()
 	itemRepo := infra.NewItemRepository()
+	getItemsquery := infra.NewGetItemsQuery()
 	
 	addItemUsecase := usecase.NewAddItemUsecase(
 		listRepo,
@@ -37,10 +44,14 @@ func NewPresenter() Presenter {
 	addListUsecase := usecase.NewAddListUsecase(
 		listRepo,
 	)
+	getItemsUsecase := usecase.NewGetItemsUsecase(
+		getItemsquery,
+	)
 
 	return &presenter{
 		addItemUsecase: addItemUsecase,
 		addListUsecase: addListUsecase,
+		getItemsUsecase: getItemsUsecase,
 	}
 }
 
@@ -75,6 +86,35 @@ func (presenter *presenter) AddList(
 
 	res := connect.NewResponse(&AddListResponse{
 		ListId: listId,
+	})
+
+	return res, nil
+}
+
+func (presenter *presenter) GetItems(
+	ctx context.Context,
+	req *connect.Request[GetItemsRequest],
+)(*connect.Response[GetItemsResponse], error) {
+	items, err := presenter.getItemsUsecase.Execute(ctx, req.Msg.ListId)
+	if err != nil {
+		fmt.Println("Error in get items presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+
+	resItems := make([]*Item, len(items))
+	for i, item := range items {
+		resItems[i] = &Item{
+			ItemId: item.ID(),
+			Title: item.Title(),
+			Description: item.Description(),
+			IsDone: item.IsDone(),
+			DoneDate: item.DoneDate(),
+		}
+	}
+
+	res := connect.NewResponse(&GetItemsResponse{
+		Items: resItems,
 	})
 
 	return res, nil

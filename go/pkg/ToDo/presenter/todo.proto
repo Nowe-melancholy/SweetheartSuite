@@ -26,3 +26,19 @@ message AddListRequest {
 message AddListResponse {
     string listId = 1;
 }
+
+message GetItemsRequest {
+    string listId = 1;
+}
+
+message GetItemsResponse {
+    repeated Item items = 1;
+}
+
+message Item {
+    string itemId = 1;
+    string title = 2;
+    string description = 3;
+    bool isDone = 4;
+    string doneDate = 5;
+}
