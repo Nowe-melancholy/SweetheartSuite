@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package SweetheartSuite.v2;
-
-option go_package = "SweetheartSuite/v2/pkg";
-
-import "pkg/ToDo/presenter/todo.proto";
-import "pkg/User/presenter/user.proto";

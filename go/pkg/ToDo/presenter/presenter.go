@@ -59,6 +59,7 @@ func (presenter *presenter) AddItem(
 	ctx context.Context,
 	req *connect.Request[AddItemRequest],
 ) (*connect.Response[AddItemResponse], error) {
+	fmt.Println("Add item presenter called")
 	itemId, err := presenter.addItemUsecase.Execute(ctx, req.Msg.CoupleId, req.Msg.Title, req.Msg.Description)
 	if err != nil {
 		fmt.Println("Error in add item presenter")
@@ -77,6 +78,7 @@ func (presenter *presenter) AddList(
 	ctx context.Context,
 	req *connect.Request[AddListRequest],
 ) (*connect.Response[AddListResponse], error) {
+	fmt.Println("Add list presenter called")
 	listId, err := presenter.addListUsecase.Execute(ctx, req.Msg.CoupleId)
 	if err != nil {
 		fmt.Println("Error in add list presenter")
@@ -95,6 +97,7 @@ func (presenter *presenter) GetItems(
 	ctx context.Context,
 	req *connect.Request[GetItemsRequest],
 )(*connect.Response[GetItemsResponse], error) {
+	fmt.Println("Get items presenter called")
 	items, err := presenter.getItemsUsecase.Execute(ctx, req.Msg.ListId)
 	if err != nil {
 		fmt.Println("Error in get items presenter")

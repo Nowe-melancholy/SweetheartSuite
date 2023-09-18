@@ -37,12 +37,15 @@ const (
 	ToDoAddItemProcedure = "/SweetheartSuite.v2.ToDo/AddItem"
 	// ToDoAddListProcedure is the fully-qualified name of the ToDo's AddList RPC.
 	ToDoAddListProcedure = "/SweetheartSuite.v2.ToDo/AddList"
+	// ToDoGetItemsProcedure is the fully-qualified name of the ToDo's GetItems RPC.
+	ToDoGetItemsProcedure = "/SweetheartSuite.v2.ToDo/GetItems"
 )
 
 // ToDoClient is a client for the SweetheartSuite.v2.ToDo service.
 type ToDoClient interface {
 	AddItem(context.Context, *connect.Request[presenter.AddItemRequest]) (*connect.Response[presenter.AddItemResponse], error)
 	AddList(context.Context, *connect.Request[presenter.AddListRequest]) (*connect.Response[presenter.AddListResponse], error)
+	GetItems(context.Context, *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error)
 }
 
 // NewToDoClient constructs a client for the SweetheartSuite.v2.ToDo service. By default, it uses
@@ -65,13 +68,19 @@ func NewToDoClient(httpClient connect.HTTPClient, baseURL string, opts ...connec
 			baseURL+ToDoAddListProcedure,
 			opts...,
 		),
+		getItems: connect.NewClient[presenter.GetItemsRequest, presenter.GetItemsResponse](
+			httpClient,
+			baseURL+ToDoGetItemsProcedure,
+			opts...,
+		),
 	}
 }
 
 // toDoClient implements ToDoClient.
 type toDoClient struct {
-	addItem *connect.Client[presenter.AddItemRequest, presenter.AddItemResponse]
-	addList *connect.Client[presenter.AddListRequest, presenter.AddListResponse]
+	addItem  *connect.Client[presenter.AddItemRequest, presenter.AddItemResponse]
+	addList  *connect.Client[presenter.AddListRequest, presenter.AddListResponse]
+	getItems *connect.Client[presenter.GetItemsRequest, presenter.GetItemsResponse]
 }
 
 // AddItem calls SweetheartSuite.v2.ToDo.AddItem.
@@ -84,10 +93,16 @@ func (c *toDoClient) AddList(ctx context.Context, req *connect.Request[presenter
 	return c.addList.CallUnary(ctx, req)
 }
 
+// GetItems calls SweetheartSuite.v2.ToDo.GetItems.
+func (c *toDoClient) GetItems(ctx context.Context, req *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error) {
+	return c.getItems.CallUnary(ctx, req)
+}
+
 // ToDoHandler is an implementation of the SweetheartSuite.v2.ToDo service.
 type ToDoHandler interface {
 	AddItem(context.Context, *connect.Request[presenter.AddItemRequest]) (*connect.Response[presenter.AddItemResponse], error)
 	AddList(context.Context, *connect.Request[presenter.AddListRequest]) (*connect.Response[presenter.AddListResponse], error)
+	GetItems(context.Context, *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error)
 }
 
 // NewToDoHandler builds an HTTP handler from the service implementation. It returns the path on
@@ -106,12 +121,19 @@ func NewToDoHandler(svc ToDoHandler, opts ...connect.HandlerOption) (string, htt
 		svc.AddList,
 		opts...,
 	)
+	toDoGetItemsHandler := connect.NewUnaryHandler(
+		ToDoGetItemsProcedure,
+		svc.GetItems,
+		opts...,
+	)
 	return "/SweetheartSuite.v2.ToDo/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case ToDoAddItemProcedure:
 			toDoAddItemHandler.ServeHTTP(w, r)
 		case ToDoAddListProcedure:
 			toDoAddListHandler.ServeHTTP(w, r)
+		case ToDoGetItemsProcedure:
+			toDoGetItemsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -127,4 +149,8 @@ func (UnimplementedToDoHandler) AddItem(context.Context, *connect.Request[presen
 
 func (UnimplementedToDoHandler) AddList(context.Context, *connect.Request[presenter.AddListRequest]) (*connect.Response[presenter.AddListResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.ToDo.AddList is not implemented"))
+}
+
+func (UnimplementedToDoHandler) GetItems(context.Context, *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.ToDo.GetItems is not implemented"))
 }

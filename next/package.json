@@ -8,10 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "panda codegen",
-    "grpc-codegen": "protoc --ts_proto_opt=outputServices=grpc-js --ts_proto_opt=enumsAsLiterals=true --proto_path=../go --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --ts_proto_out=./types ../go/pkg/main.proto"
+    "codegen-user:win": "grpc_tools_node_protoc --plugin=protoc-gen-ts=%CD%/node_modules/.bin/protoc-gen-ts.cmd --proto_path=../go --js_out=import_style=commonjs,binary:types --grpc_out=grpc_js:types --ts_out=types ../go/pkg/User/presenter/user.proto",
+    "codegen-todo:win": "grpc_tools_node_protoc --plugin=protoc-gen-ts=%CD%/node_modules/.bin/protoc-gen-ts.cmd --proto_path=../go --js_out=import_style=commonjs,binary:types --grpc_out=grpc_js:types --ts_out=types ../go/pkg/ToDo/presenter/todo.proto",
+    "codegen:win": "npm run codegen-user:win && npm run codegen-todo:win"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.9.2",
+    "@grpc/grpc-js": "^1.9.3",
     "@types/node": "20.6.0",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
@@ -27,6 +29,8 @@
   "devDependencies": {
     "@pandacss/dev": "^0.14.0",
     "@types/babel__core": "^7.20.1",
+    "grpc_tools_node_protoc_ts": "^5.3.3",
+    "grpc-tools": "^1.11.3",
     "rimraf": "^5.0.1"
   }
 }
