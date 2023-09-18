@@ -24,7 +24,7 @@ func (usecase *getItemsUsecase) Execute(
 	ctx context.Context,
 	coupleId string,
 ) (items []item.Item, err error) {
-	items, err = usecase.getItemsQuery.GetItemsByListId(ctx, coupleId)
+	items, err = usecase.getItemsQuery.GetItemsByCoupleId(ctx, coupleId)
 	if err != nil {
 		return nil, err
 	}

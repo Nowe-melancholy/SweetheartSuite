@@ -8,6 +8,7 @@ import (
 type List struct {
 	ID       string
 	CoupleID string
+	Items   []Item `gorm:"foreignKey:ListID"`
 }
 
 type listRepository struct {

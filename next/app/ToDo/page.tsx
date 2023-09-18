@@ -1,21 +1,19 @@
 import { grid } from '../../styled-system/patterns';
 import { credentials } from '@grpc/grpc-js';
-import { grpcRequest } from '../../util/grpc-request';
 import { ToDoClient } from '../../types/pkg/ToDo/presenter/todo_grpc_pb';
 import {
   GetItemsRequest,
   GetItemsResponse,
 } from '../../types/pkg/ToDo/presenter/todo_pb';
 
-const fetch = async (listId: string): Promise<GetItemsResponse> => {
+const fetch = async (coupleId: string): Promise<GetItemsResponse> => {
   const client = new ToDoClient('localhost:8080', credentials.createInsecure());
   const req = new GetItemsRequest();
-  req.setListid(listId);
+  req.setCoupleid(coupleId);
 
   return new Promise((resolve, reject) => {
     client.getItems(req, (err, res) => {
       if (err) {
-        console.log('##############################');
         reject(err);
       } else {
         resolve(res);

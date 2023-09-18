@@ -98,7 +98,7 @@ func (presenter *presenter) GetItems(
 	req *connect.Request[GetItemsRequest],
 )(*connect.Response[GetItemsResponse], error) {
 	fmt.Println("Get items presenter called")
-	items, err := presenter.getItemsUsecase.Execute(ctx, req.Msg.ListId)
+	items, err := presenter.getItemsUsecase.Execute(ctx, req.Msg.CoupleId)
 	if err != nil {
 		fmt.Println("Error in get items presenter")
 		fmt.Println(err)

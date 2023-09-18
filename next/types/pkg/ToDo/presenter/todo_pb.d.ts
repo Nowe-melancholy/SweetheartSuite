@@ -93,8 +93,8 @@ export namespace AddListResponse {
 }
 
 export class GetItemsRequest extends jspb.Message { 
-    getListid(): string;
-    setListid(value: string): GetItemsRequest;
+    getCoupleid(): string;
+    setCoupleid(value: string): GetItemsRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetItemsRequest.AsObject;
@@ -108,7 +108,7 @@ export class GetItemsRequest extends jspb.Message {
 
 export namespace GetItemsRequest {
     export type AsObject = {
-        listid: string,
+        coupleid: string,
     }
 }
 

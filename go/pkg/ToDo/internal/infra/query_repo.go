@@ -13,7 +13,8 @@ func NewGetItemsQuery() interfaces.GetItemsIQuery {
 	return &query{}
 }
 
-func (query *query) GetItemsByListId(ctx context.Context, listId string) ([]item.Item, error) {
+func (query *query) GetItemsByCoupleId(ctx context.Context, coupeId string) ([]item.Item, error) {
+	var list List
 	var items []item.Item
 
 	db, err := CreateDBConnection()
@@ -22,7 +23,15 @@ func (query *query) GetItemsByListId(ctx context.Context, listId string) ([]item
 		return nil, err
 	}
 
-	db.Where("list_id = ?", listId).Find(&items)
+	db.Preload("Items").Where("couple_id = ?", coupeId).Find(&list)
+
+	for _, itemData := range list.Items {
+		item, err := item.NewItem(itemData.ID, itemData.Title, itemData.Description, itemData.ListID)
+		if err != nil {
+			return nil, err
+		}
+		items = append(items, *item)
+	}
 
 	return items, nil
 }

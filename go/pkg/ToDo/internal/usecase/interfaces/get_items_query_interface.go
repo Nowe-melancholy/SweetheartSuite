@@ -6,5 +6,5 @@ import (
 )
 
 type GetItemsIQuery interface {
-	GetItemsByListId(ctx context.Context, listId string) ([]item.Item, error)
+	GetItemsByCoupleId(ctx context.Context, coupeId string) ([]item.Item, error)
 }

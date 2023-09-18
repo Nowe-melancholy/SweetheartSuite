@@ -781,7 +781,7 @@ proto.SweetheartSuite.v2.GetItemsRequest.prototype.toObject = function(opt_inclu
  */
 proto.SweetheartSuite.v2.GetItemsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    listid: jspb.Message.getFieldWithDefault(msg, 1, "")
+    coupleid: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -820,7 +820,7 @@ proto.SweetheartSuite.v2.GetItemsRequest.deserializeBinaryFromReader = function(
     switch (field) {
     case 1:
       var value = /** @type {string} */ (reader.readString());
-      msg.setListid(value);
+      msg.setCoupleid(value);
       break;
     default:
       reader.skipField();
@@ -851,7 +851,7 @@ proto.SweetheartSuite.v2.GetItemsRequest.prototype.serializeBinary = function() 
  */
 proto.SweetheartSuite.v2.GetItemsRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getListid();
+  f = message.getCoupleid();
   if (f.length > 0) {
     writer.writeString(
       1,
@@ -862,10 +862,10 @@ proto.SweetheartSuite.v2.GetItemsRequest.serializeBinaryToWriter = function(mess
 
 
 /**
- * optional string listId = 1;
+ * optional string coupleId = 1;
  * @return {string}
  */
-proto.SweetheartSuite.v2.GetItemsRequest.prototype.getListid = function() {
+proto.SweetheartSuite.v2.GetItemsRequest.prototype.getCoupleid = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
@@ -874,7 +874,7 @@ proto.SweetheartSuite.v2.GetItemsRequest.prototype.getListid = function() {
  * @param {string} value
  * @return {!proto.SweetheartSuite.v2.GetItemsRequest} returns this
  */
-proto.SweetheartSuite.v2.GetItemsRequest.prototype.setListid = function(value) {
+proto.SweetheartSuite.v2.GetItemsRequest.prototype.setCoupleid = function(value) {
   return jspb.Message.setProto3StringField(this, 1, value);
 };
 

@@ -29,7 +29,7 @@ message AddListResponse {
 }
 
 message GetItemsRequest {
-    string listId = 1;
+    string coupleId = 1;
 }
 
 message GetItemsResponse {
