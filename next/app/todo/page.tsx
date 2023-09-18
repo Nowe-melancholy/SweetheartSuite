@@ -25,13 +25,13 @@ const fetch = async (coupleId: string): Promise<GetItemsResponse> => {
 };
 
 export default async function ToDo() {
-  const res = await fetch('974ef869-b3b2-41f2-abcc-b9156981cd62');
+  const res = await fetch('hoge');
 
   return (
     <>
       <h1>やりたいことリスト</h1>
       <Link
-        href='/todo/create'
+        href='/todo/add'
         className={css({
           color: 'white',
           backgroundColor: 'orange',
