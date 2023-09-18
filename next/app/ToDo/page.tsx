@@ -5,6 +5,8 @@ import {
   GetItemsRequest,
   GetItemsResponse,
 } from '../../types/pkg/ToDo/presenter/todo_pb';
+import { css } from '../../styled-system/css';
+import Link from 'next/link';
 
 const fetch = async (coupleId: string): Promise<GetItemsResponse> => {
   const client = new ToDoClient('localhost:8080', credentials.createInsecure());
@@ -28,7 +30,16 @@ export default async function ToDo() {
   return (
     <>
       <h1>やりたいことリスト</h1>
-      <button>新規作成</button>
+      <Link
+        href='/todo/create'
+        className={css({
+          color: 'white',
+          backgroundColor: 'orange',
+          borderRadius: '100vh',
+        })}
+      >
+        新規作成
+      </Link>
       <div className={grid({ columns: 5, backgroundColor: 'white' })}>
         <div>状態</div>
         <div>タイトル</div>
