@@ -7,6 +7,7 @@ import {
 } from '../../types/pkg/ToDo/presenter/todo_pb';
 import { css } from '../../styled-system/css';
 import Link from 'next/link';
+import { ItemComponent } from './_component/Item';
 
 const fetch = async (coupleId: string): Promise<GetItemsResponse> => {
   const client = new ToDoClient('localhost:8080', credentials.createInsecure());
@@ -47,17 +48,13 @@ export default async function ToDo() {
         <div>編集</div>
         <div>削除</div>
         {res.getItemsList().map((item) => (
-          <>
-            <div>{item.getIsdone()}</div>
-            <div>{item.getTitle()}</div>
-            <div>{item.getDescription()}</div>
-            <div>
-              <button>編集</button>
-            </div>
-            <div>
-              <button>削除</button>
-            </div>
-          </>
+          <ItemComponent
+            key={item.getItemid()}
+            id={item.getItemid()}
+            title={item.getTitle()}
+            description={item.getDescription()}
+            isDone={item.getIsdone()}
+          />
         ))}
       </div>
     </>

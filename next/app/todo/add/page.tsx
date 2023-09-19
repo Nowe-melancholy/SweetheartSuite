@@ -3,13 +3,18 @@
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { addToDoItem } from './action';
+import { useRouter } from 'next/navigation';
 
 export default async function ToDoCreate() {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const { register, handleSubmit } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => addToDoItem(data);
+  const onSubmit = async (data: FormData) => {
+    await addToDoItem(data);
+    router.push('/todo');
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

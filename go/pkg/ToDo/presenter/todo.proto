@@ -8,6 +8,7 @@ service ToDo {
     rpc AddItem(AddItemRequest) returns (AddItemResponse) {}
     rpc AddList(AddListRequest) returns (AddListResponse) {}
     rpc GetItems(GetItemsRequest) returns (GetItemsResponse) {}
+    rpc DeleteItem(DeleteItemRequest) returns (DeleteItemResponse) {}
 }
 
 message AddItemRequest {
@@ -43,3 +44,9 @@ message Item {
     bool isDone = 4;
     string doneDate = 5;
 }
+
+message DeleteItemRequest {
+    string itemId = 1;
+}
+
+message DeleteItemResponse {}

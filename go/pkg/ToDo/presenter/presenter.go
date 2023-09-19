@@ -24,12 +24,18 @@ type Presenter interface {
 		ctx context.Context,
 		req *connect.Request[GetItemsRequest],
 	)(*connect.Response[GetItemsResponse], error)
+
+	DeleteItem(
+		ctx context.Context,
+		req *connect.Request[DeleteItemRequest],
+	) (*connect.Response[DeleteItemResponse], error)
 }
 
 type presenter struct {
 	addItemUsecase usecase.AddItemUsecase
 	addListUsecase usecase.AddListUsecase
 	getItemsUsecase usecase.GetItemsUsecase
+	deleteItemUsecase usecase.DeleteItemUsecase
 }
 
 func NewPresenter() Presenter {
@@ -48,10 +54,15 @@ func NewPresenter() Presenter {
 		getItemsquery,
 	)
 
+	deleteItemUsecase := usecase.NewDeleteItemUsecase(
+		itemRepo,
+	)
+
 	return &presenter{
 		addItemUsecase: addItemUsecase,
 		addListUsecase: addListUsecase,
 		getItemsUsecase: getItemsUsecase,
+		deleteItemUsecase: deleteItemUsecase,
 	}
 }
 
@@ -119,6 +130,23 @@ func (presenter *presenter) GetItems(
 	res := connect.NewResponse(&GetItemsResponse{
 		Items: resItems,
 	})
+
+	return res, nil
+}
+
+func (presenter *presenter) DeleteItem(
+	ctx context.Context,
+	req *connect.Request[DeleteItemRequest],
+) (*connect.Response[DeleteItemResponse], error) {
+	fmt.Println("Delete item presenter called")
+	err := presenter.deleteItemUsecase.Execute(ctx, req.Msg.ItemId)
+	if err != nil {
+		fmt.Println("Error in delete item presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+
+	res := connect.NewResponse(&DeleteItemResponse{})
 
 	return res, nil
 }

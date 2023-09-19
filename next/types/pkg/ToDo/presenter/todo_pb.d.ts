@@ -165,3 +165,40 @@ export namespace Item {
         donedate: string,
     }
 }
+
+export class DeleteItemRequest extends jspb.Message { 
+    getItemid(): string;
+    setItemid(value: string): DeleteItemRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DeleteItemRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: DeleteItemRequest): DeleteItemRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DeleteItemRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DeleteItemRequest;
+    static deserializeBinaryFromReader(message: DeleteItemRequest, reader: jspb.BinaryReader): DeleteItemRequest;
+}
+
+export namespace DeleteItemRequest {
+    export type AsObject = {
+        itemid: string,
+    }
+}
+
+export class DeleteItemResponse extends jspb.Message { 
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): DeleteItemResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: DeleteItemResponse): DeleteItemResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: DeleteItemResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): DeleteItemResponse;
+    static deserializeBinaryFromReader(message: DeleteItemResponse, reader: jspb.BinaryReader): DeleteItemResponse;
+}
+
+export namespace DeleteItemResponse {
+    export type AsObject = {
+    }
+}

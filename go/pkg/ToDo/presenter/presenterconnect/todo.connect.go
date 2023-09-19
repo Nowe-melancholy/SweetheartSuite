@@ -39,6 +39,8 @@ const (
 	ToDoAddListProcedure = "/SweetheartSuite.v2.ToDo/AddList"
 	// ToDoGetItemsProcedure is the fully-qualified name of the ToDo's GetItems RPC.
 	ToDoGetItemsProcedure = "/SweetheartSuite.v2.ToDo/GetItems"
+	// ToDoDeleteItemProcedure is the fully-qualified name of the ToDo's DeleteItem RPC.
+	ToDoDeleteItemProcedure = "/SweetheartSuite.v2.ToDo/DeleteItem"
 )
 
 // ToDoClient is a client for the SweetheartSuite.v2.ToDo service.
@@ -46,6 +48,7 @@ type ToDoClient interface {
 	AddItem(context.Context, *connect.Request[presenter.AddItemRequest]) (*connect.Response[presenter.AddItemResponse], error)
 	AddList(context.Context, *connect.Request[presenter.AddListRequest]) (*connect.Response[presenter.AddListResponse], error)
 	GetItems(context.Context, *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error)
+	DeleteItem(context.Context, *connect.Request[presenter.DeleteItemRequest]) (*connect.Response[presenter.DeleteItemResponse], error)
 }
 
 // NewToDoClient constructs a client for the SweetheartSuite.v2.ToDo service. By default, it uses
@@ -73,14 +76,20 @@ func NewToDoClient(httpClient connect.HTTPClient, baseURL string, opts ...connec
 			baseURL+ToDoGetItemsProcedure,
 			opts...,
 		),
+		deleteItem: connect.NewClient[presenter.DeleteItemRequest, presenter.DeleteItemResponse](
+			httpClient,
+			baseURL+ToDoDeleteItemProcedure,
+			opts...,
+		),
 	}
 }
 
 // toDoClient implements ToDoClient.
 type toDoClient struct {
-	addItem  *connect.Client[presenter.AddItemRequest, presenter.AddItemResponse]
-	addList  *connect.Client[presenter.AddListRequest, presenter.AddListResponse]
-	getItems *connect.Client[presenter.GetItemsRequest, presenter.GetItemsResponse]
+	addItem    *connect.Client[presenter.AddItemRequest, presenter.AddItemResponse]
+	addList    *connect.Client[presenter.AddListRequest, presenter.AddListResponse]
+	getItems   *connect.Client[presenter.GetItemsRequest, presenter.GetItemsResponse]
+	deleteItem *connect.Client[presenter.DeleteItemRequest, presenter.DeleteItemResponse]
 }
 
 // AddItem calls SweetheartSuite.v2.ToDo.AddItem.
@@ -98,11 +107,17 @@ func (c *toDoClient) GetItems(ctx context.Context, req *connect.Request[presente
 	return c.getItems.CallUnary(ctx, req)
 }
 
+// DeleteItem calls SweetheartSuite.v2.ToDo.DeleteItem.
+func (c *toDoClient) DeleteItem(ctx context.Context, req *connect.Request[presenter.DeleteItemRequest]) (*connect.Response[presenter.DeleteItemResponse], error) {
+	return c.deleteItem.CallUnary(ctx, req)
+}
+
 // ToDoHandler is an implementation of the SweetheartSuite.v2.ToDo service.
 type ToDoHandler interface {
 	AddItem(context.Context, *connect.Request[presenter.AddItemRequest]) (*connect.Response[presenter.AddItemResponse], error)
 	AddList(context.Context, *connect.Request[presenter.AddListRequest]) (*connect.Response[presenter.AddListResponse], error)
 	GetItems(context.Context, *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error)
+	DeleteItem(context.Context, *connect.Request[presenter.DeleteItemRequest]) (*connect.Response[presenter.DeleteItemResponse], error)
 }
 
 // NewToDoHandler builds an HTTP handler from the service implementation. It returns the path on
@@ -126,6 +141,11 @@ func NewToDoHandler(svc ToDoHandler, opts ...connect.HandlerOption) (string, htt
 		svc.GetItems,
 		opts...,
 	)
+	toDoDeleteItemHandler := connect.NewUnaryHandler(
+		ToDoDeleteItemProcedure,
+		svc.DeleteItem,
+		opts...,
+	)
 	return "/SweetheartSuite.v2.ToDo/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case ToDoAddItemProcedure:
@@ -134,6 +154,8 @@ func NewToDoHandler(svc ToDoHandler, opts ...connect.HandlerOption) (string, htt
 			toDoAddListHandler.ServeHTTP(w, r)
 		case ToDoGetItemsProcedure:
 			toDoGetItemsHandler.ServeHTTP(w, r)
+		case ToDoDeleteItemProcedure:
+			toDoDeleteItemHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -153,4 +175,8 @@ func (UnimplementedToDoHandler) AddList(context.Context, *connect.Request[presen
 
 func (UnimplementedToDoHandler) GetItems(context.Context, *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.ToDo.GetItems is not implemented"))
+}
+
+func (UnimplementedToDoHandler) DeleteItem(context.Context, *connect.Request[presenter.DeleteItemRequest]) (*connect.Response[presenter.DeleteItemResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.ToDo.DeleteItem is not implemented"))
 }

@@ -11,6 +11,7 @@ interface IToDoService extends grpc.ServiceDefinition<grpc.UntypedServiceImpleme
     addItem: IToDoService_IAddItem;
     addList: IToDoService_IAddList;
     getItems: IToDoService_IGetItems;
+    deleteItem: IToDoService_IDeleteItem;
 }
 
 interface IToDoService_IAddItem extends grpc.MethodDefinition<pkg_ToDo_presenter_todo_pb.AddItemRequest, pkg_ToDo_presenter_todo_pb.AddItemResponse> {
@@ -40,6 +41,15 @@ interface IToDoService_IGetItems extends grpc.MethodDefinition<pkg_ToDo_presente
     responseSerialize: grpc.serialize<pkg_ToDo_presenter_todo_pb.GetItemsResponse>;
     responseDeserialize: grpc.deserialize<pkg_ToDo_presenter_todo_pb.GetItemsResponse>;
 }
+interface IToDoService_IDeleteItem extends grpc.MethodDefinition<pkg_ToDo_presenter_todo_pb.DeleteItemRequest, pkg_ToDo_presenter_todo_pb.DeleteItemResponse> {
+    path: "/SweetheartSuite.v2.ToDo/DeleteItem";
+    requestStream: false;
+    responseStream: false;
+    requestSerialize: grpc.serialize<pkg_ToDo_presenter_todo_pb.DeleteItemRequest>;
+    requestDeserialize: grpc.deserialize<pkg_ToDo_presenter_todo_pb.DeleteItemRequest>;
+    responseSerialize: grpc.serialize<pkg_ToDo_presenter_todo_pb.DeleteItemResponse>;
+    responseDeserialize: grpc.deserialize<pkg_ToDo_presenter_todo_pb.DeleteItemResponse>;
+}
 
 export const ToDoService: IToDoService;
 
@@ -47,6 +57,7 @@ export interface IToDoServer {
     addItem: grpc.handleUnaryCall<pkg_ToDo_presenter_todo_pb.AddItemRequest, pkg_ToDo_presenter_todo_pb.AddItemResponse>;
     addList: grpc.handleUnaryCall<pkg_ToDo_presenter_todo_pb.AddListRequest, pkg_ToDo_presenter_todo_pb.AddListResponse>;
     getItems: grpc.handleUnaryCall<pkg_ToDo_presenter_todo_pb.GetItemsRequest, pkg_ToDo_presenter_todo_pb.GetItemsResponse>;
+    deleteItem: grpc.handleUnaryCall<pkg_ToDo_presenter_todo_pb.DeleteItemRequest, pkg_ToDo_presenter_todo_pb.DeleteItemResponse>;
 }
 
 export interface IToDoClient {
@@ -59,6 +70,9 @@ export interface IToDoClient {
     getItems(request: pkg_ToDo_presenter_todo_pb.GetItemsRequest, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.GetItemsResponse) => void): grpc.ClientUnaryCall;
     getItems(request: pkg_ToDo_presenter_todo_pb.GetItemsRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.GetItemsResponse) => void): grpc.ClientUnaryCall;
     getItems(request: pkg_ToDo_presenter_todo_pb.GetItemsRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.GetItemsResponse) => void): grpc.ClientUnaryCall;
+    deleteItem(request: pkg_ToDo_presenter_todo_pb.DeleteItemRequest, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.DeleteItemResponse) => void): grpc.ClientUnaryCall;
+    deleteItem(request: pkg_ToDo_presenter_todo_pb.DeleteItemRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.DeleteItemResponse) => void): grpc.ClientUnaryCall;
+    deleteItem(request: pkg_ToDo_presenter_todo_pb.DeleteItemRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.DeleteItemResponse) => void): grpc.ClientUnaryCall;
 }
 
 export class ToDoClient extends grpc.Client implements IToDoClient {
@@ -72,4 +86,7 @@ export class ToDoClient extends grpc.Client implements IToDoClient {
     public getItems(request: pkg_ToDo_presenter_todo_pb.GetItemsRequest, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.GetItemsResponse) => void): grpc.ClientUnaryCall;
     public getItems(request: pkg_ToDo_presenter_todo_pb.GetItemsRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.GetItemsResponse) => void): grpc.ClientUnaryCall;
     public getItems(request: pkg_ToDo_presenter_todo_pb.GetItemsRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.GetItemsResponse) => void): grpc.ClientUnaryCall;
+    public deleteItem(request: pkg_ToDo_presenter_todo_pb.DeleteItemRequest, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.DeleteItemResponse) => void): grpc.ClientUnaryCall;
+    public deleteItem(request: pkg_ToDo_presenter_todo_pb.DeleteItemRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.DeleteItemResponse) => void): grpc.ClientUnaryCall;
+    public deleteItem(request: pkg_ToDo_presenter_todo_pb.DeleteItemRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: pkg_ToDo_presenter_todo_pb.DeleteItemResponse) => void): grpc.ClientUnaryCall;
 }
