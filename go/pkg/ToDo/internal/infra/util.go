@@ -1,14 +1,12 @@
 package infra
 
 import (
-	"fmt"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
 
-func CreateDBConnection() (*gorm.DB, error) {
+func InitToDoDB() *gorm.DB {
 	db, err := gorm.Open(postgres.New(postgres.Config{
 		DSN: "host=db user=postgres password=postgres dbname=sweetheartdb port=5432 sslmode=disable TimeZone=Asia/Shanghai",
 	}), &gorm.Config{
@@ -19,9 +17,8 @@ func CreateDBConnection() (*gorm.DB, error) {
 	})
 
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		panic(err)
 	}
 
-	return db, nil
+	return db
 }

@@ -39,9 +39,11 @@ type presenter struct {
 }
 
 func NewPresenter() Presenter {
-	listRepo := infra.NewListRepository()
-	itemRepo := infra.NewItemRepository()
-	getItemsquery := infra.NewGetItemsQuery()
+	db := infra.InitToDoDB()
+	
+	listRepo := infra.NewListRepository(db)
+	itemRepo := infra.NewItemRepository(db)
+	getItemsquery := infra.NewGetItemsQuery(db)
 	
 	addItemUsecase := usecase.NewAddItemUsecase(
 		listRepo,

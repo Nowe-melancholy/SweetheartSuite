@@ -3,7 +3,8 @@ package infra
 import (
 	"SweetheartSuite/v2/pkg/User/common"
 	"SweetheartSuite/v2/pkg/User/internal/domain/user"
-	"fmt"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -13,10 +14,11 @@ type User struct {
 }
 
 type userRepository struct {
+	db *gorm.DB
 }
 
-func NewUserRepository() user.UserIRepository {
-	return &userRepository{}
+func NewUserRepository(db *gorm.DB) user.UserIRepository {
+	return &userRepository{db}
 }
 
 func (repo *userRepository) Create(user *user.User) error {
@@ -26,14 +28,7 @@ func (repo *userRepository) Create(user *user.User) error {
 		Gender: user.Gender(),
 	}
 
-	db, err := CreateDBConnection()
-
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	db.Create(&userData)
+	repo.db.Create(&userData)
 
 	return nil
 }

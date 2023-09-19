@@ -2,7 +2,8 @@ package infra
 
 import (
 	"SweetheartSuite/v2/pkg/ToDo/internal/domain/list"
-	"fmt"
+
+	"gorm.io/gorm"
 )
 
 type List struct {
@@ -12,22 +13,16 @@ type List struct {
 }
 
 type listRepository struct {
+	db *gorm.DB
 }
 
-func NewListRepository() list.ListIRepository {
-	return &listRepository{}
+func NewListRepository(db *gorm.DB) list.ListIRepository {
+	return &listRepository{db: db}
 }
 
 func (repo *listRepository) FindByCoupleID(coupleId string) (*list.List, error) {
-	db, err := CreateDBConnection()
-
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-
 	var result List
-	res := db.First(&result, "couple_id = ?", coupleId)
+	res := repo.db.First(&result, "couple_id = ?", coupleId)
 
 	if res.Error != nil {
 		return nil, res.Error
@@ -47,14 +42,7 @@ func (repo *listRepository) Create(list *list.List) error {
 		CoupleID: list.CoupleID(),
 	}
 
-	db, err := CreateDBConnection()
-
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	db.Create(&listData)
+	repo.db.Create(&listData)
 
 	return nil
 }

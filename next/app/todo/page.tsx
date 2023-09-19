@@ -1,4 +1,4 @@
-import { grid } from '../../styled-system/patterns';
+import { center, flex, grid } from '../../styled-system/patterns';
 import { credentials } from '@grpc/grpc-js';
 import { ToDoClient } from '../../types/pkg/ToDo/presenter/todo_grpc_pb';
 import {
@@ -29,12 +29,20 @@ export default async function ToDo() {
   const res = await fetch('hoge');
 
   return (
-    <>
+    <div
+      className={flex({
+        direction: 'column',
+        width: '50%',
+        margin: 'auto',
+        padding: '1rem',
+      })}
+    >
       <h1>やりたいことリスト</h1>
       <Link
         href='/todo/add'
         className={css({
           color: 'white',
+          width: 'fit-content',
           backgroundColor: 'orange',
           borderRadius: '100vh',
         })}
@@ -57,6 +65,6 @@ export default async function ToDo() {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }

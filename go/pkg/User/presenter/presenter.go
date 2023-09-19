@@ -22,7 +22,9 @@ type presenter struct {
 }
 
 func NewPresenter() Presenter {
-	userRepo := infra.NewUserRepository()
+	db := infra.InitUserDB()
+
+	userRepo := infra.NewUserRepository(db)
 
 	addUserUsecase := usecase.NewAddUserUsecase(
 		userRepo,

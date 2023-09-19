@@ -2,7 +2,8 @@ package infra
 
 import (
 	"SweetheartSuite/v2/pkg/ToDo/internal/domain/item"
-	"fmt"
+
+	"gorm.io/gorm"
 )
 
 type Item struct {
@@ -15,10 +16,11 @@ type Item struct {
 }
 
 type itemRepository struct {
+	db *gorm.DB
 }
 
-func NewItemRepository() item.ItemIRepository {
-	return &itemRepository{}
+func NewItemRepository(db *gorm.DB) item.ItemIRepository {
+	return &itemRepository{db: db}
 }
 
 func (repo *itemRepository) Create(item *item.Item) error {
@@ -31,29 +33,15 @@ func (repo *itemRepository) Create(item *item.Item) error {
 		ListID:      item.ListID(),
 	}
 
-	db, err := CreateDBConnection()
-
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	db.Create(&itemData)
+	repo.db.Create(&itemData)
 
 	return nil
 }
 
 func (repo *itemRepository) Delete(itemId string) error {
-	db, err := CreateDBConnection()
-
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
 	var itemData Item
 
-	db.Where("id = ?", itemId).Delete(&itemData)
+	repo.db.Where("id = ?", itemId).Delete(&itemData)
 
 	return nil
 }
