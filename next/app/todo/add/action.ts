@@ -1,10 +1,9 @@
 'use server';
 
-import { credentials } from '@grpc/grpc-js';
-import { ToDoClient } from '../../../types/pkg/ToDo/presenter/todo_grpc_pb';
-import { AddItemRequest } from '../../../types/pkg/ToDo/presenter/todo_pb';
+import { createClient, createChannel } from 'nice-grpc';
+import { ToDoDefinition } from '../../../types/pkg/ToDo/presenter/todo';
+import { BACKEND_END_POINT } from '../../const/const';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 type AddToDoItemType = {
   title: string;
@@ -12,19 +11,7 @@ type AddToDoItemType = {
 };
 
 export async function addToDoItem(item: AddToDoItemType) {
-  const client = new ToDoClient('localhost:8080', credentials.createInsecure());
-  const request = new AddItemRequest();
-  request.setCoupleid('hoge');
-  request.setTitle(item.title);
-  request.setDescription(item.description);
-  return new Promise((resolve, reject) => {
-    client.addItem(request, (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-        revalidatePath('/todo');
-      }
-    });
-  });
+  const client = createClient(ToDoDefinition, createChannel(BACKEND_END_POINT));
+  await client.addItem({ coupleId: 'hoge', ...item });
+  revalidatePath('/todo');
 }

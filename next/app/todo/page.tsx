@@ -1,28 +1,15 @@
-import { center, flex, grid } from '../../styled-system/patterns';
-import { credentials } from '@grpc/grpc-js';
-import { ToDoClient } from '../../types/pkg/ToDo/presenter/todo_grpc_pb';
-import {
-  GetItemsRequest,
-  GetItemsResponse,
-} from '../../types/pkg/ToDo/presenter/todo_pb';
+import { flex, grid } from '../../styled-system/patterns';
 import { css } from '../../styled-system/css';
 import Link from 'next/link';
 import { ItemComponent } from './_component/Item';
+import { createChannel, createClient } from 'nice-grpc';
+import { ToDoDefinition } from '../../types/pkg/ToDo/presenter/todo';
+import { BACKEND_END_POINT } from '../const/const';
 
-const fetch = async (coupleId: string): Promise<GetItemsResponse> => {
-  const client = new ToDoClient('localhost:8080', credentials.createInsecure());
-  const req = new GetItemsRequest();
-  req.setCoupleid(coupleId);
-
-  return new Promise((resolve, reject) => {
-    client.getItems(req, (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
+const fetch = async (coupleId: string) => {
+  const channel = createChannel(BACKEND_END_POINT);
+  const client = createClient(ToDoDefinition, channel);
+  return client.getItems({ coupleId });
 };
 
 export default async function ToDo() {
@@ -55,13 +42,13 @@ export default async function ToDo() {
         <div>概要</div>
         <div>編集</div>
         <div>削除</div>
-        {res.getItemsList().map((item) => (
+        {res.items.map(({ itemId, title, description, isDone }) => (
           <ItemComponent
-            key={item.getItemid()}
-            id={item.getItemid()}
-            title={item.getTitle()}
-            description={item.getDescription()}
-            isDone={item.getIsdone()}
+            key={itemId}
+            id={itemId}
+            title={title}
+            description={description}
+            isDone={isDone}
           />
         ))}
       </div>
