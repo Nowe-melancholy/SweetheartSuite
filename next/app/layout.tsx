@@ -9,7 +9,13 @@ export const metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang='ja'>
-      <body className={css({ backgroundColor: 'amber.100' })}>{children}</body>
+      <body
+        className={css({
+          backgroundColor: '#f5e1e8',
+        })}
+      >
+        {children}
+      </body>
     </html>
   );
 };

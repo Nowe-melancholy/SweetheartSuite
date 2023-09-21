@@ -1,6 +1,6 @@
 'use client';
 
-import { Item } from '../../../types/pkg/ToDo/presenter/todo_pb';
+import { css } from '../../../styled-system/css';
 import { deleteItem } from './action';
 
 type Props = {
@@ -12,14 +12,23 @@ type Props = {
 
 export const ItemComponent = ({ id, isDone, title, description }: Props) => (
   <>
-    <div>{isDone}</div>
-    <div>{title}</div>
-    <div>{description}</div>
-    <div>
+    <div className={itemStyle}>{isDone}</div>
+    <div className={itemStyle}>{title}</div>
+    <div className={itemStyle}>{description}</div>
+    <div className={itemStyle}>
       <button>編集</button>
     </div>
-    <div>
+    <div className={itemStyle}>
       <button onClick={() => deleteItem(id)}>削除</button>
     </div>
   </>
 );
+
+const itemStyle = css({
+  border: '1px solid #e0d0de',
+  borderRadius: '10px',
+  padding: '0.8rem',
+  margin: '0.5em 0',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
