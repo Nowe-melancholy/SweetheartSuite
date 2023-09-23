@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { css } from '../../../styled-system/css';
 import { deleteItem } from './action';
 
@@ -16,7 +17,7 @@ export const ItemComponent = ({ id, isDone, title, description }: Props) => (
     <div className={itemStyle}>{title}</div>
     <div className={itemStyle}>{description}</div>
     <div className={itemStyle}>
-      <button>編集</button>
+      <Link href={`/todo/edit/${id}`}>編集</Link>
     </div>
     <div className={itemStyle}>
       <button onClick={() => deleteItem(id)}>削除</button>

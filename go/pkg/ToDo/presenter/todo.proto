@@ -7,7 +7,9 @@ option go_package = "SweetheartSuite/v2/pkg/ToDo/presenter";
 service ToDo {
     rpc AddItem(AddItemRequest) returns (AddItemResponse) {}
     rpc AddList(AddListRequest) returns (AddListResponse) {}
-    rpc GetItems(GetItemsRequest) returns (GetItemsResponse) {}
+    rpc GetItemsByIds(GetItemsByIdsRequest) returns (GetItemsByIdsResponse) {}
+    rpc GetItemsByCouple(GetItemsByCoupleRequest) returns (GetItemsByCoupleResponse) {}
+    rpc UpdateItem(UpdateItemRequest) returns (UpdateItemResponse) {}
     rpc DeleteItem(DeleteItemRequest) returns (DeleteItemResponse) {}
 }
 
@@ -29,13 +31,37 @@ message AddListResponse {
     string listId = 1;
 }
 
-message GetItemsRequest {
+message GetItemsByIdsRequest {
+    repeated string itemIds = 1;
+}
+
+message GetItemsByIdsResponse {
+    repeated Item items = 1;
+}
+
+message GetItemsByCoupleRequest {
     string coupleId = 1;
 }
 
-message GetItemsResponse {
+message GetItemsByCoupleResponse {
     repeated Item items = 1;
 }
+
+message UpdateItemRequest {
+    string itemId = 1;
+    string title = 2;
+    string description = 3;
+    bool isDone = 4;
+    string doneDate = 5;
+}
+
+message UpdateItemResponse {}
+
+message DeleteItemRequest {
+    string itemId = 1;
+}
+
+message DeleteItemResponse {}
 
 message Item {
     string itemId = 1;
@@ -44,9 +70,3 @@ message Item {
     bool isDone = 4;
     string doneDate = 5;
 }
-
-message DeleteItemRequest {
-    string itemId = 1;
-}
-
-message DeleteItemResponse {}

@@ -9,7 +9,7 @@ import { BACKEND_END_POINT } from '../const/const';
 const fetch = async (coupleId: string) => {
   const channel = createChannel(BACKEND_END_POINT);
   const client = createClient(ToDoDefinition, channel);
-  return client.getItems({ coupleId });
+  return client.getItemsByCouple({ coupleId });
 };
 
 export default async function ToDo() {

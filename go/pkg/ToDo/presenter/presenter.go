@@ -20,10 +20,20 @@ type Presenter interface {
 		req *connect.Request[AddListRequest],
 	) (*connect.Response[AddListResponse], error)
 
-	GetItems(
+	GetItemsByIds(
 		ctx context.Context,
-		req *connect.Request[GetItemsRequest],
-	)(*connect.Response[GetItemsResponse], error)
+		req *connect.Request[GetItemsByIdsRequest],
+	) (*connect.Response[GetItemsByIdsResponse], error)
+
+	GetItemsByCouple(
+		ctx context.Context,
+		req *connect.Request[GetItemsByCoupleRequest],
+	)(*connect.Response[GetItemsByCoupleResponse], error)
+
+	UpdateItem(
+		ctx context.Context,
+		req *connect.Request[UpdateItemRequest],
+	)(*connect.Response[UpdateItemResponse], error)
 
 	DeleteItem(
 		ctx context.Context,
@@ -34,7 +44,9 @@ type Presenter interface {
 type presenter struct {
 	addItemUsecase usecase.AddItemUsecase
 	addListUsecase usecase.AddListUsecase
-	getItemsUsecase usecase.GetItemsUsecase
+	getItemsByIdsUsecase usecase.GetItemsByIdsUsecase
+	getItemsByCoupleUsecase usecase.GetItemsByCoupleUsecase
+	updateItemUsecase usecase.UpdateItemUsecase
 	deleteItemUsecase usecase.DeleteItemUsecase
 }
 
@@ -43,7 +55,7 @@ func NewPresenter() Presenter {
 	
 	listRepo := infra.NewListRepository(db)
 	itemRepo := infra.NewItemRepository(db)
-	getItemsquery := infra.NewGetItemsQuery(db)
+	getItemsByCouplequery := infra.NewGetItemsByCoupleQuery(db)
 	
 	addItemUsecase := usecase.NewAddItemUsecase(
 		listRepo,
@@ -52,10 +64,15 @@ func NewPresenter() Presenter {
 	addListUsecase := usecase.NewAddListUsecase(
 		listRepo,
 	)
-	getItemsUsecase := usecase.NewGetItemsUsecase(
-		getItemsquery,
+	getItemsByIdsUsecase := usecase.NewGetItemsByIdsUsecase(
+		itemRepo,
 	)
-
+	getItemsByCoupleUsecase := usecase.NewGetItemsUsecase(
+		getItemsByCouplequery,
+	)
+	updateItemUsecase := usecase.NewUpdateItemUsecase(
+		itemRepo,
+	)
 	deleteItemUsecase := usecase.NewDeleteItemUsecase(
 		itemRepo,
 	)
@@ -63,7 +80,9 @@ func NewPresenter() Presenter {
 	return &presenter{
 		addItemUsecase: addItemUsecase,
 		addListUsecase: addListUsecase,
-		getItemsUsecase: getItemsUsecase,
+		getItemsByIdsUsecase: getItemsByIdsUsecase,
+		getItemsByCoupleUsecase: getItemsByCoupleUsecase,
+		updateItemUsecase: updateItemUsecase,
 		deleteItemUsecase: deleteItemUsecase,
 	}
 }
@@ -106,12 +125,42 @@ func (presenter *presenter) AddList(
 	return res, nil
 }
 
-func (presenter *presenter) GetItems(
+func (presenter *presenter) GetItemsByIds(
 	ctx context.Context,
-	req *connect.Request[GetItemsRequest],
-)(*connect.Response[GetItemsResponse], error) {
-	fmt.Println("Get items presenter called")
-	items, err := presenter.getItemsUsecase.Execute(ctx, req.Msg.CoupleId)
+	req *connect.Request[GetItemsByIdsRequest],
+) (*connect.Response[GetItemsByIdsResponse], error) {
+	fmt.Println("Get items by ids presenter called")
+	items, err := presenter.getItemsByIdsUsecase.Execute(ctx, req.Msg.ItemIds)
+	if err != nil {
+		fmt.Println("Error in get items by ids presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+
+	resItems := make([]*Item, len(items))
+	for i, item := range items {
+		resItems[i] = &Item{
+			ItemId: item.ID(),
+			Title: item.Title(),
+			Description: item.Description(),
+			IsDone: item.IsDone(),
+			DoneDate: item.DoneDate(),
+		}
+	}
+
+	res := connect.NewResponse(&GetItemsByIdsResponse{
+		Items: resItems,
+	})
+
+	return res, nil
+}
+
+func (presenter *presenter) GetItemsByCouple(
+	ctx context.Context,
+	req *connect.Request[GetItemsByCoupleRequest],
+)(*connect.Response[GetItemsByCoupleResponse], error) {
+	fmt.Println("Get items by couple presenter called")
+	items, err := presenter.getItemsByCoupleUsecase.Execute(ctx, req.Msg.CoupleId)
 	if err != nil {
 		fmt.Println("Error in get items presenter")
 		fmt.Println(err)
@@ -129,9 +178,26 @@ func (presenter *presenter) GetItems(
 		}
 	}
 
-	res := connect.NewResponse(&GetItemsResponse{
+	res := connect.NewResponse(&GetItemsByCoupleResponse{
 		Items: resItems,
 	})
+
+	return res, nil
+}
+
+func (presenter *presenter) UpdateItem(
+	ctx context.Context,
+	req *connect.Request[UpdateItemRequest],
+)(*connect.Response[UpdateItemResponse], error) {
+	fmt.Println("Update item presenter called")
+	err := presenter.updateItemUsecase.Execute(ctx, req.Msg.ItemId, req.Msg.Title, req.Msg.Description, req.Msg.IsDone)
+	if err != nil {
+		fmt.Println("Error in update item presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+
+	res := connect.NewResponse(&UpdateItemResponse{})
 
 	return res, nil
 }

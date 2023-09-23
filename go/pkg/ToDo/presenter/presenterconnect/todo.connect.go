@@ -37,8 +37,12 @@ const (
 	ToDoAddItemProcedure = "/SweetheartSuite.v2.ToDo/AddItem"
 	// ToDoAddListProcedure is the fully-qualified name of the ToDo's AddList RPC.
 	ToDoAddListProcedure = "/SweetheartSuite.v2.ToDo/AddList"
-	// ToDoGetItemsProcedure is the fully-qualified name of the ToDo's GetItems RPC.
-	ToDoGetItemsProcedure = "/SweetheartSuite.v2.ToDo/GetItems"
+	// ToDoGetItemsByIdsProcedure is the fully-qualified name of the ToDo's GetItemsByIds RPC.
+	ToDoGetItemsByIdsProcedure = "/SweetheartSuite.v2.ToDo/GetItemsByIds"
+	// ToDoGetItemsByCoupleProcedure is the fully-qualified name of the ToDo's GetItemsByCouple RPC.
+	ToDoGetItemsByCoupleProcedure = "/SweetheartSuite.v2.ToDo/GetItemsByCouple"
+	// ToDoUpdateItemProcedure is the fully-qualified name of the ToDo's UpdateItem RPC.
+	ToDoUpdateItemProcedure = "/SweetheartSuite.v2.ToDo/UpdateItem"
 	// ToDoDeleteItemProcedure is the fully-qualified name of the ToDo's DeleteItem RPC.
 	ToDoDeleteItemProcedure = "/SweetheartSuite.v2.ToDo/DeleteItem"
 )
@@ -47,7 +51,9 @@ const (
 type ToDoClient interface {
 	AddItem(context.Context, *connect.Request[presenter.AddItemRequest]) (*connect.Response[presenter.AddItemResponse], error)
 	AddList(context.Context, *connect.Request[presenter.AddListRequest]) (*connect.Response[presenter.AddListResponse], error)
-	GetItems(context.Context, *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error)
+	GetItemsByIds(context.Context, *connect.Request[presenter.GetItemsByIdsRequest]) (*connect.Response[presenter.GetItemsByIdsResponse], error)
+	GetItemsByCouple(context.Context, *connect.Request[presenter.GetItemsByCoupleRequest]) (*connect.Response[presenter.GetItemsByCoupleResponse], error)
+	UpdateItem(context.Context, *connect.Request[presenter.UpdateItemRequest]) (*connect.Response[presenter.UpdateItemResponse], error)
 	DeleteItem(context.Context, *connect.Request[presenter.DeleteItemRequest]) (*connect.Response[presenter.DeleteItemResponse], error)
 }
 
@@ -71,9 +77,19 @@ func NewToDoClient(httpClient connect.HTTPClient, baseURL string, opts ...connec
 			baseURL+ToDoAddListProcedure,
 			opts...,
 		),
-		getItems: connect.NewClient[presenter.GetItemsRequest, presenter.GetItemsResponse](
+		getItemsByIds: connect.NewClient[presenter.GetItemsByIdsRequest, presenter.GetItemsByIdsResponse](
 			httpClient,
-			baseURL+ToDoGetItemsProcedure,
+			baseURL+ToDoGetItemsByIdsProcedure,
+			opts...,
+		),
+		getItemsByCouple: connect.NewClient[presenter.GetItemsByCoupleRequest, presenter.GetItemsByCoupleResponse](
+			httpClient,
+			baseURL+ToDoGetItemsByCoupleProcedure,
+			opts...,
+		),
+		updateItem: connect.NewClient[presenter.UpdateItemRequest, presenter.UpdateItemResponse](
+			httpClient,
+			baseURL+ToDoUpdateItemProcedure,
 			opts...,
 		),
 		deleteItem: connect.NewClient[presenter.DeleteItemRequest, presenter.DeleteItemResponse](
@@ -86,10 +102,12 @@ func NewToDoClient(httpClient connect.HTTPClient, baseURL string, opts ...connec
 
 // toDoClient implements ToDoClient.
 type toDoClient struct {
-	addItem    *connect.Client[presenter.AddItemRequest, presenter.AddItemResponse]
-	addList    *connect.Client[presenter.AddListRequest, presenter.AddListResponse]
-	getItems   *connect.Client[presenter.GetItemsRequest, presenter.GetItemsResponse]
-	deleteItem *connect.Client[presenter.DeleteItemRequest, presenter.DeleteItemResponse]
+	addItem          *connect.Client[presenter.AddItemRequest, presenter.AddItemResponse]
+	addList          *connect.Client[presenter.AddListRequest, presenter.AddListResponse]
+	getItemsByIds    *connect.Client[presenter.GetItemsByIdsRequest, presenter.GetItemsByIdsResponse]
+	getItemsByCouple *connect.Client[presenter.GetItemsByCoupleRequest, presenter.GetItemsByCoupleResponse]
+	updateItem       *connect.Client[presenter.UpdateItemRequest, presenter.UpdateItemResponse]
+	deleteItem       *connect.Client[presenter.DeleteItemRequest, presenter.DeleteItemResponse]
 }
 
 // AddItem calls SweetheartSuite.v2.ToDo.AddItem.
@@ -102,9 +120,19 @@ func (c *toDoClient) AddList(ctx context.Context, req *connect.Request[presenter
 	return c.addList.CallUnary(ctx, req)
 }
 
-// GetItems calls SweetheartSuite.v2.ToDo.GetItems.
-func (c *toDoClient) GetItems(ctx context.Context, req *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error) {
-	return c.getItems.CallUnary(ctx, req)
+// GetItemsByIds calls SweetheartSuite.v2.ToDo.GetItemsByIds.
+func (c *toDoClient) GetItemsByIds(ctx context.Context, req *connect.Request[presenter.GetItemsByIdsRequest]) (*connect.Response[presenter.GetItemsByIdsResponse], error) {
+	return c.getItemsByIds.CallUnary(ctx, req)
+}
+
+// GetItemsByCouple calls SweetheartSuite.v2.ToDo.GetItemsByCouple.
+func (c *toDoClient) GetItemsByCouple(ctx context.Context, req *connect.Request[presenter.GetItemsByCoupleRequest]) (*connect.Response[presenter.GetItemsByCoupleResponse], error) {
+	return c.getItemsByCouple.CallUnary(ctx, req)
+}
+
+// UpdateItem calls SweetheartSuite.v2.ToDo.UpdateItem.
+func (c *toDoClient) UpdateItem(ctx context.Context, req *connect.Request[presenter.UpdateItemRequest]) (*connect.Response[presenter.UpdateItemResponse], error) {
+	return c.updateItem.CallUnary(ctx, req)
 }
 
 // DeleteItem calls SweetheartSuite.v2.ToDo.DeleteItem.
@@ -116,7 +144,9 @@ func (c *toDoClient) DeleteItem(ctx context.Context, req *connect.Request[presen
 type ToDoHandler interface {
 	AddItem(context.Context, *connect.Request[presenter.AddItemRequest]) (*connect.Response[presenter.AddItemResponse], error)
 	AddList(context.Context, *connect.Request[presenter.AddListRequest]) (*connect.Response[presenter.AddListResponse], error)
-	GetItems(context.Context, *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error)
+	GetItemsByIds(context.Context, *connect.Request[presenter.GetItemsByIdsRequest]) (*connect.Response[presenter.GetItemsByIdsResponse], error)
+	GetItemsByCouple(context.Context, *connect.Request[presenter.GetItemsByCoupleRequest]) (*connect.Response[presenter.GetItemsByCoupleResponse], error)
+	UpdateItem(context.Context, *connect.Request[presenter.UpdateItemRequest]) (*connect.Response[presenter.UpdateItemResponse], error)
 	DeleteItem(context.Context, *connect.Request[presenter.DeleteItemRequest]) (*connect.Response[presenter.DeleteItemResponse], error)
 }
 
@@ -136,9 +166,19 @@ func NewToDoHandler(svc ToDoHandler, opts ...connect.HandlerOption) (string, htt
 		svc.AddList,
 		opts...,
 	)
-	toDoGetItemsHandler := connect.NewUnaryHandler(
-		ToDoGetItemsProcedure,
-		svc.GetItems,
+	toDoGetItemsByIdsHandler := connect.NewUnaryHandler(
+		ToDoGetItemsByIdsProcedure,
+		svc.GetItemsByIds,
+		opts...,
+	)
+	toDoGetItemsByCoupleHandler := connect.NewUnaryHandler(
+		ToDoGetItemsByCoupleProcedure,
+		svc.GetItemsByCouple,
+		opts...,
+	)
+	toDoUpdateItemHandler := connect.NewUnaryHandler(
+		ToDoUpdateItemProcedure,
+		svc.UpdateItem,
 		opts...,
 	)
 	toDoDeleteItemHandler := connect.NewUnaryHandler(
@@ -152,8 +192,12 @@ func NewToDoHandler(svc ToDoHandler, opts ...connect.HandlerOption) (string, htt
 			toDoAddItemHandler.ServeHTTP(w, r)
 		case ToDoAddListProcedure:
 			toDoAddListHandler.ServeHTTP(w, r)
-		case ToDoGetItemsProcedure:
-			toDoGetItemsHandler.ServeHTTP(w, r)
+		case ToDoGetItemsByIdsProcedure:
+			toDoGetItemsByIdsHandler.ServeHTTP(w, r)
+		case ToDoGetItemsByCoupleProcedure:
+			toDoGetItemsByCoupleHandler.ServeHTTP(w, r)
+		case ToDoUpdateItemProcedure:
+			toDoUpdateItemHandler.ServeHTTP(w, r)
 		case ToDoDeleteItemProcedure:
 			toDoDeleteItemHandler.ServeHTTP(w, r)
 		default:
@@ -173,8 +217,16 @@ func (UnimplementedToDoHandler) AddList(context.Context, *connect.Request[presen
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.ToDo.AddList is not implemented"))
 }
 
-func (UnimplementedToDoHandler) GetItems(context.Context, *connect.Request[presenter.GetItemsRequest]) (*connect.Response[presenter.GetItemsResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.ToDo.GetItems is not implemented"))
+func (UnimplementedToDoHandler) GetItemsByIds(context.Context, *connect.Request[presenter.GetItemsByIdsRequest]) (*connect.Response[presenter.GetItemsByIdsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.ToDo.GetItemsByIds is not implemented"))
+}
+
+func (UnimplementedToDoHandler) GetItemsByCouple(context.Context, *connect.Request[presenter.GetItemsByCoupleRequest]) (*connect.Response[presenter.GetItemsByCoupleResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.ToDo.GetItemsByCouple is not implemented"))
+}
+
+func (UnimplementedToDoHandler) UpdateItem(context.Context, *connect.Request[presenter.UpdateItemRequest]) (*connect.Response[presenter.UpdateItemResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.ToDo.UpdateItem is not implemented"))
 }
 
 func (UnimplementedToDoHandler) DeleteItem(context.Context, *connect.Request[presenter.DeleteItemRequest]) (*connect.Response[presenter.DeleteItemResponse], error) {

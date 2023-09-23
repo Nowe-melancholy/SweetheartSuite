@@ -5,6 +5,6 @@ import (
 	"context"
 )
 
-type GetItemsIQuery interface {
+type GetItemsByCoupleIQuery interface {
 	GetItemsByCoupleId(ctx context.Context, coupeId string) ([]item.Item, error)
 }

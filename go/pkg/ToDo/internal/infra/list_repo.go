@@ -7,7 +7,7 @@ import (
 )
 
 type List struct {
-	ID       string
+	ID       string `gorm:"primaryKey"`
 	CoupleID string
 	Items   []Item `gorm:"foreignKey:ListID"`
 }

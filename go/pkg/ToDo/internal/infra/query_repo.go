@@ -12,7 +12,7 @@ type query struct {
 	db *gorm.DB
 }
 
-func NewGetItemsQuery(db *gorm.DB) interfaces.GetItemsIQuery {
+func NewGetItemsByCoupleQuery(db *gorm.DB) interfaces.GetItemsByCoupleIQuery {
 	return &query{db: db}
 }
 

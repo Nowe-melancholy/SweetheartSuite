@@ -1,22 +1,34 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { addToDoItem } from './action';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { updateItem } from './action';
 
-export default async function AddToDoItem() {
+type Props = {
+  itemId: string;
+  title: string;
+  description: string;
+};
+
+export const EditToDoItem = ({ itemId, title, description }: Props) => {
   const router = useRouter();
 
-  const { register, handleSubmit } = useForm<FormData>();
+  const { register, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      itemId,
+      title,
+      description,
+    },
+  });
 
   const onSubmit = async (data: FormData) => {
-    await addToDoItem(data);
+    await updateItem(data);
     router.push('/todo');
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div>新規作成</div>
+      <div>編集</div>
       <div>
         <label>タイトル</label>
         <input type='text' {...register('title')} />
@@ -25,12 +37,13 @@ export default async function AddToDoItem() {
         <label>概要</label>
         <input type='text' {...register('description')} />
       </div>
-      <button type='submit'>作成</button>
+      <button type='submit'>保存</button>
     </form>
   );
-}
+};
 
 type FormData = {
+  itemId: string;
   title: string;
   description: string;
 };

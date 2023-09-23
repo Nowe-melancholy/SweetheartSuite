@@ -1,25 +1,30 @@
 version: '3'
 services:
   app:
-    build: 
+    build:
       context: ./go
       dockerfile: ./Dockerfile
     volumes:
       - .:/go/src/app
     ports:
-      - "8080:8080"
+      - '8080:8080'
     depends_on:
       - db
     tty: true
   db:
     image: postgres:latest
+    command: postgres -c log_destination=stderr -c log_statement=all -c log_connections=on -c log_disconnections=on
+    logging:
+      options:
+        max-size: '10k'
+        max-file: '5'
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: sweetheartdb
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - dbdata:/var/lib/postgresql/data
   pgadmin:
@@ -33,7 +38,7 @@ services:
     depends_on:
       - db
     ports:
-      - "5050:80"
+      - '5050:80'
 volumes:
   dbdata:
   pgadmindata:
