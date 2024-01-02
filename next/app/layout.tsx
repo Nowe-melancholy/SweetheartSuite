@@ -9,12 +9,27 @@ export const metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang='ja'>
-      <body
-        className={css({
-          backgroundColor: '#f5e1e8',
-        })}
-      >
-        {children}
+      <body>
+        <div
+          className={css({
+            display: 'flex',
+            flexDirection: 'column',
+            height: 'full',
+            width: 'full',
+            justifyContent: 'center',
+          })}
+        >
+          <div
+            className={css({
+              fontSize: '24px',
+              border: '1px solid #e0d0de',
+              backgroundColor: '#e0d0de',
+            })}
+          >
+            SweetHeartSuite
+          </div>
+          <div>{children}</div>
+        </div>
       </body>
     </html>
   );

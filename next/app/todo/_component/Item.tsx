@@ -2,34 +2,25 @@
 
 import Link from 'next/link';
 import { css } from '../../../styled-system/css';
-import { deleteItem } from './action';
 
 type Props = {
   id: string;
   isDone: boolean;
   title: string;
-  description: string;
 };
 
-export const ItemComponent = ({ id, isDone, title, description }: Props) => (
-  <>
-    <div className={itemStyle}>{isDone}</div>
-    <div className={itemStyle}>{title}</div>
-    <div className={itemStyle}>{description}</div>
-    <div className={itemStyle}>
-      <Link href={`/todo/edit/${id}`}>編集</Link>
-    </div>
-    <div className={itemStyle}>
-      <button onClick={() => deleteItem(id)}>削除</button>
-    </div>
-  </>
+export const ItemComponent = ({ id, isDone, title }: Props) => (
+  <div
+    className={css({
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      padding: '10px',
+    })}
+  >
+    <input type='checkbox' checked={isDone} />
+    <label className={css({ padding: '10px', fontSize: '20px' })}>
+      <Link href={`/todo/edit/${id}`}>{title}</Link>
+    </label>
+  </div>
 );
-
-const itemStyle = css({
-  border: '1px solid #e0d0de',
-  borderRadius: '10px',
-  padding: '0.8rem',
-  margin: '0.5em 0',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-});

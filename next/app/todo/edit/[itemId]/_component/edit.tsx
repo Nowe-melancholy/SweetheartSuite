@@ -3,6 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { updateItem } from './action';
+import { stack } from '../../../../../styled-system/patterns';
+import { InputText } from '../../../../../components/InputText';
+import { css } from '../../../../../styled-system/css';
+import { Textarea } from '../../../../../components/Textarea';
 
 type Props = {
   itemId: string;
@@ -28,16 +32,26 @@ export const EditToDoItem = ({ itemId, title, description }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div>編集</div>
-      <div>
+      <div className={stack()}>
         <label>タイトル</label>
-        <input type='text' {...register('title')} />
-      </div>
-      <div>
+        <InputText {...register('title')} />
         <label>概要</label>
-        <input type='text' {...register('description')} />
+        <div className={css({ height: '150px' })}>
+          <Textarea {...register('description')} />
+        </div>
+        <button
+          type='submit'
+          className={css({
+            height: '30px',
+            width: '50px',
+            borderRadius: '0.5rem',
+            color: 'white',
+            backgroundColor: 'black',
+          })}
+        >
+          保存
+        </button>
       </div>
-      <button type='submit'>保存</button>
     </form>
   );
 };
