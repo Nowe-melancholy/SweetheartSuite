@@ -7,6 +7,7 @@ import { stack } from '../../../../../styled-system/patterns';
 import { InputText } from '../../../../../components/InputText';
 import { css } from '../../../../../styled-system/css';
 import { Textarea } from '../../../../../components/Textarea';
+import { BUtton } from '../../../../../components/Button';
 
 type Props = {
   itemId: string;
@@ -39,18 +40,14 @@ export const EditToDoItem = ({ itemId, title, description }: Props) => {
         <div className={css({ height: '150px' })}>
           <Textarea {...register('description')} />
         </div>
-        <button
-          type='submit'
+        <div
           className={css({
             height: '30px',
             width: '50px',
-            borderRadius: '0.5rem',
-            color: 'white',
-            backgroundColor: 'black',
           })}
         >
-          保存
-        </button>
+          <BUtton value='保存' />
+        </div>
       </div>
     </form>
   );

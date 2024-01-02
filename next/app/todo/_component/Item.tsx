@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { css } from '../../../styled-system/css';
+import { flex } from '../../../styled-system/patterns';
 
 type Props = {
   id: string;
@@ -11,11 +12,10 @@ type Props = {
 
 export const ItemComponent = ({ id, isDone, title }: Props) => (
   <div
-    className={css({
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+    className={flex({
+      direction: 'row',
       padding: '10px',
+      alignItems: 'center',
     })}
   >
     <input type='checkbox' checked={isDone} />

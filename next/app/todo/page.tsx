@@ -6,6 +6,7 @@ import { createChannel, createClient } from 'nice-grpc';
 import { ToDoDefinition } from '../../types/pkg/ToDo/presenter/todo';
 import { BACKEND_END_POINT } from '../const/const';
 import { Card } from '../../components/Card';
+import { AddItem } from './_component/AddItem';
 
 const fetch = async (coupleId: string) => {
   const channel = createChannel(BACKEND_END_POINT);
@@ -23,11 +24,7 @@ export default async function ToDo() {
           <h1 className={css({ margin: '10px', fontSize: '24px' })}>
             やりたいことリスト
           </h1>
-          <div
-            className={css({
-              display: 'flex',
-            })}
-          >
+          <div className={flex({ direction: 'column' })}>
             {res.items.map((item) => (
               <ItemComponent
                 id={item.itemId}
@@ -36,6 +33,8 @@ export default async function ToDo() {
               />
             ))}
           </div>
+
+          <AddItem />
         </Card>
       </div>
     </div>
