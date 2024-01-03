@@ -10,7 +10,7 @@ type Props = {
   title: string;
 };
 
-export const ItemComponent = ({ id, isDone, title }: Props) => (
+export const Item = ({ id, isDone, title }: Props) => (
   <div
     className={flex({
       direction: 'row',
@@ -18,7 +18,7 @@ export const ItemComponent = ({ id, isDone, title }: Props) => (
       alignItems: 'center',
     })}
   >
-    <input type='checkbox' checked={isDone} />
+    <input type='checkbox' checked={isDone} onChange={() => {}} />
     <label className={css({ padding: '10px', fontSize: '20px' })}>
       <Link href={`/todo/edit/${id}`}>{title}</Link>
     </label>

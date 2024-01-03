@@ -6,6 +6,7 @@ option go_package = "SweetheartSuite/v2/pkg/User/presenter";
 
 service User {
     rpc AddUser(AddUserRequest) returns (AddUserResponse) {}
+    rpc GetUserByMailAddress(GetUserByMailAddressRequest) returns (GetUserByMailAddressResponse) {}
 }
 
 enum Gender {
@@ -16,9 +17,21 @@ enum Gender {
 
 message AddUserRequest {
     string name = 1;
-    Gender gender = 2;
+    string mailAddress = 2;
+    Gender gender = 3;
 }
 
 message AddUserResponse {
     string userId = 1;
+}
+
+message GetUserByMailAddressRequest {
+    string mailAddress = 1;
+}
+
+message GetUserByMailAddressResponse {
+    string id = 1;
+    string name = 2;
+    string mailAddress = 3;
+    Gender gender = 4;
 }

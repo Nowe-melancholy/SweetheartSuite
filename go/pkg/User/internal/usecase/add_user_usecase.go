@@ -9,7 +9,7 @@ import (
 )
 
 type AddUserUsecase interface {
-	Execute(ctx context.Context, name string, gender common.Gender) (userId string, err error)
+	Execute(ctx context.Context, name string, mailAddress string, gender common.Gender) (userId string, err error)
 }
 
 type addUserUsecase struct {
@@ -25,9 +25,10 @@ func NewAddUserUsecase(userRepo user.UserIRepository) AddUserUsecase {
 func (usecase *addUserUsecase) Execute(
 	ctx context.Context,
 	name string,
+	mailAddress string,
 	gender common.Gender,
 ) (userId string, err error) {
-	user, err := user.NewUser(uuid.NewString(), name, gender)
+	user, err := user.NewUser(uuid.NewString(), name, mailAddress, gender)
 	if err != nil {
 		return "", err
 	}

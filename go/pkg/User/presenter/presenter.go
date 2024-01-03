@@ -15,10 +15,15 @@ type Presenter interface {
 		ctx context.Context,
 		req *connect.Request[AddUserRequest],
 	) (*connect.Response[AddUserResponse], error)
+	GetUserByMailAddress(
+		ctx context.Context,
+		req *connect.Request[GetUserByMailAddressRequest],
+	)(*connect.Response[GetUserByMailAddressResponse], error)
 }
 
 type presenter struct {
 	addUserUsecase usecase.AddUserUsecase
+	getUserByMailAddressUsecase usecase.GetUserByMailAddressUsecase
 }
 
 func NewPresenter() Presenter {
@@ -30,8 +35,13 @@ func NewPresenter() Presenter {
 		userRepo,
 	)
 
+	getUserByMailAddressUsecase := usecase.NewGetUserByMailAddressUsecase(
+		userRepo,
+	)
+
 	return &presenter{
 		addUserUsecase: addUserUsecase,
+		getUserByMailAddressUsecase: getUserByMailAddressUsecase,
 	}
 }
 
@@ -44,6 +54,7 @@ func (presenter *presenter) AddUser(
 	userId, err := presenter.addUserUsecase.Execute(
 		ctx,
 		req.Msg.Name,
+		req.Msg.MailAddress,
 		common.Gender(req.Msg.Gender),
 	)
 	if err != nil {
@@ -54,6 +65,36 @@ func (presenter *presenter) AddUser(
 
 	res := connect.NewResponse(&AddUserResponse{
 		UserId: userId,
+	})
+
+	return res, nil
+}
+
+func (presenter *presenter) GetUserByMailAddress(
+	ctx context.Context,
+	req *connect.Request[GetUserByMailAddressRequest],
+)(*connect.Response[GetUserByMailAddressResponse], error) {
+	fmt.Println("Get user by mail address presenter")
+	user, err := presenter.getUserByMailAddressUsecase.Execute(
+		ctx,
+		req.Msg.MailAddress,
+	)
+
+	if err != nil {
+		fmt.Println("Error in get user by mail address presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+
+	if user == nil {
+		return nil, nil
+	}
+
+	res := connect.NewResponse(&GetUserByMailAddressResponse{
+		Id: user.ID(),
+		Name: user.Name(),
+		MailAddress: user.MailAddress(),
+		Gender: Gender(user.Gender()),
 	})
 
 	return res, nil

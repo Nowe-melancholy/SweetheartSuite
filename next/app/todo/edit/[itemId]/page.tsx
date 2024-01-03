@@ -2,7 +2,7 @@ import { createChannel, createClient } from 'nice-grpc';
 import { ToDoDefinition } from '../../../../types/pkg/ToDo/presenter/todo';
 import { BACKEND_END_POINT } from '../../../const/const';
 import { EditToDoItem } from './_component/edit';
-import { Card } from '../../../../components/Card';
+import { Card } from '../../../_components/Card';
 import { center } from '../../../../styled-system/patterns';
 import { css } from '../../../../styled-system/css';
 

@@ -1,11 +1,10 @@
-import { center, flex, grid } from '../../styled-system/patterns';
+import { center, flex } from '../../styled-system/patterns';
 import { css } from '../../styled-system/css';
-import Link from 'next/link';
-import { ItemComponent } from './_component/Item';
+import { Item } from './_component/Item';
 import { createChannel, createClient } from 'nice-grpc';
 import { ToDoDefinition } from '../../types/pkg/ToDo/presenter/todo';
 import { BACKEND_END_POINT } from '../const/const';
-import { Card } from '../../components/Card';
+import { Card } from '../_components/Card';
 import { AddItem } from './_component/AddItem';
 
 const fetch = async (coupleId: string) => {
@@ -26,7 +25,8 @@ export default async function ToDo() {
           </h1>
           <div className={flex({ direction: 'column' })}>
             {res.items.map((item) => (
-              <ItemComponent
+              <Item
+                key={item.itemId}
                 id={item.itemId}
                 title={item.title}
                 isDone={item.isDone}

@@ -35,11 +35,15 @@ const (
 const (
 	// UserAddUserProcedure is the fully-qualified name of the User's AddUser RPC.
 	UserAddUserProcedure = "/SweetheartSuite.v2.User/AddUser"
+	// UserGetUserByMailAddressProcedure is the fully-qualified name of the User's GetUserByMailAddress
+	// RPC.
+	UserGetUserByMailAddressProcedure = "/SweetheartSuite.v2.User/GetUserByMailAddress"
 )
 
 // UserClient is a client for the SweetheartSuite.v2.User service.
 type UserClient interface {
 	AddUser(context.Context, *connect.Request[presenter.AddUserRequest]) (*connect.Response[presenter.AddUserResponse], error)
+	GetUserByMailAddress(context.Context, *connect.Request[presenter.GetUserByMailAddressRequest]) (*connect.Response[presenter.GetUserByMailAddressResponse], error)
 }
 
 // NewUserClient constructs a client for the SweetheartSuite.v2.User service. By default, it uses
@@ -57,12 +61,18 @@ func NewUserClient(httpClient connect.HTTPClient, baseURL string, opts ...connec
 			baseURL+UserAddUserProcedure,
 			opts...,
 		),
+		getUserByMailAddress: connect.NewClient[presenter.GetUserByMailAddressRequest, presenter.GetUserByMailAddressResponse](
+			httpClient,
+			baseURL+UserGetUserByMailAddressProcedure,
+			opts...,
+		),
 	}
 }
 
 // userClient implements UserClient.
 type userClient struct {
-	addUser *connect.Client[presenter.AddUserRequest, presenter.AddUserResponse]
+	addUser              *connect.Client[presenter.AddUserRequest, presenter.AddUserResponse]
+	getUserByMailAddress *connect.Client[presenter.GetUserByMailAddressRequest, presenter.GetUserByMailAddressResponse]
 }
 
 // AddUser calls SweetheartSuite.v2.User.AddUser.
@@ -70,9 +80,15 @@ func (c *userClient) AddUser(ctx context.Context, req *connect.Request[presenter
 	return c.addUser.CallUnary(ctx, req)
 }
 
+// GetUserByMailAddress calls SweetheartSuite.v2.User.GetUserByMailAddress.
+func (c *userClient) GetUserByMailAddress(ctx context.Context, req *connect.Request[presenter.GetUserByMailAddressRequest]) (*connect.Response[presenter.GetUserByMailAddressResponse], error) {
+	return c.getUserByMailAddress.CallUnary(ctx, req)
+}
+
 // UserHandler is an implementation of the SweetheartSuite.v2.User service.
 type UserHandler interface {
 	AddUser(context.Context, *connect.Request[presenter.AddUserRequest]) (*connect.Response[presenter.AddUserResponse], error)
+	GetUserByMailAddress(context.Context, *connect.Request[presenter.GetUserByMailAddressRequest]) (*connect.Response[presenter.GetUserByMailAddressResponse], error)
 }
 
 // NewUserHandler builds an HTTP handler from the service implementation. It returns the path on
@@ -86,10 +102,17 @@ func NewUserHandler(svc UserHandler, opts ...connect.HandlerOption) (string, htt
 		svc.AddUser,
 		opts...,
 	)
+	userGetUserByMailAddressHandler := connect.NewUnaryHandler(
+		UserGetUserByMailAddressProcedure,
+		svc.GetUserByMailAddress,
+		opts...,
+	)
 	return "/SweetheartSuite.v2.User/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UserAddUserProcedure:
 			userAddUserHandler.ServeHTTP(w, r)
+		case UserGetUserByMailAddressProcedure:
+			userGetUserByMailAddressHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -101,4 +124,8 @@ type UnimplementedUserHandler struct{}
 
 func (UnimplementedUserHandler) AddUser(context.Context, *connect.Request[presenter.AddUserRequest]) (*connect.Response[presenter.AddUserResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.User.AddUser is not implemented"))
+}
+
+func (UnimplementedUserHandler) GetUserByMailAddress(context.Context, *connect.Request[presenter.GetUserByMailAddressRequest]) (*connect.Response[presenter.GetUserByMailAddressResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.User.GetUserByMailAddress is not implemented"))
 }

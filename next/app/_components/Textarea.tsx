@@ -1,5 +1,5 @@
 import { ComponentPropsWithRef, FC, forwardRef } from 'react';
-import { css } from '../styled-system/css';
+import { css } from '../../styled-system/css';
 
 export const Textarea: FC<ComponentPropsWithRef<'textarea'>> = forwardRef(
   ({ ...props }, ref) => {

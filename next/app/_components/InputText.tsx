@@ -1,5 +1,5 @@
 import { ComponentPropsWithRef, FC, forwardRef } from 'react';
-import { css } from '../styled-system/css';
+import { css } from '../../styled-system/css';
 
 export const InputText: FC<ComponentPropsWithRef<'input'>> = forwardRef(
   ({ ...props }, ref) => {

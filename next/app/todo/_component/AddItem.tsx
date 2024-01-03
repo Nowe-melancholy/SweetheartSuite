@@ -2,10 +2,10 @@
 
 import { useForm } from 'react-hook-form';
 import { addToDoItem } from './action';
-import { InputText } from '../../../components/InputText';
+import { InputText } from '../../_components/InputText';
 import { flex } from '../../../styled-system/patterns';
 import { css } from '../../../styled-system/css';
-import { BUtton } from '../../../components/Button';
+import { BUtton } from '../../_components/Button';
 
 export const AddItem = () => {
   const { register, handleSubmit } = useForm<FormData>();

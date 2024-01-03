@@ -4,10 +4,10 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { updateItem } from './action';
 import { stack } from '../../../../../styled-system/patterns';
-import { InputText } from '../../../../../components/InputText';
+import { InputText } from '../../../../_components/InputText';
 import { css } from '../../../../../styled-system/css';
-import { Textarea } from '../../../../../components/Textarea';
-import { BUtton } from '../../../../../components/Button';
+import { Textarea } from '../../../../_components/Textarea';
+import { BUtton } from '../../../../_components/Button';
 
 type Props = {
   itemId: string;

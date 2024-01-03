@@ -1,5 +1,6 @@
 import { css } from '../styled-system/css';
 import './globals.css';
+import { NextAuthProvider } from './NextAuthProvider';
 
 export const metadata = {
   title: 'Next.js',
@@ -28,7 +29,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           >
             SweetHeartSuite
           </div>
-          <div>{children}</div>
+          <NextAuthProvider>
+            <div>{children}</div>
+          </NextAuthProvider>
         </div>
       </body>
     </html>

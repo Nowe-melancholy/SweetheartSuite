@@ -8,6 +8,7 @@ import (
 type User struct {
 	id     string
 	name   string
+	mailAddress string
 	gender common.Gender
 }
 
@@ -19,11 +20,15 @@ func (u *User) Name() string {
 	return u.name
 }
 
+func (u *User) MailAddress() string {
+	return u.mailAddress
+}
+
 func (u *User) Gender() common.Gender {
 	return u.gender
 }
 
-func NewUser(id string, name string, gender common.Gender) (*User, error) {
+func NewUser(id string, name string, mailAddress string, gender common.Gender) (*User, error) {
 	if id == "" {
 		return nil, errors.New("id cannot be empty")
 	}
@@ -32,9 +37,14 @@ func NewUser(id string, name string, gender common.Gender) (*User, error) {
 		return nil, errors.New("name cannot be empty")
 	}
 
+	if mailAddress == "" {
+		return nil, errors.New("mailAddress cannot be empty")
+	}
+
 	return &User{
 		id:     id,
 		name:   name,
+		mailAddress: mailAddress,
 		gender: gender,
 	}, nil
 }
