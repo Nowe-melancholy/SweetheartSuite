@@ -1,5 +1,3 @@
-import { center, flex } from '../../styled-system/patterns';
-import { css } from '../../styled-system/css';
 import { Item } from './_component/Item';
 import { createChannel, createClient } from 'nice-grpc';
 import { ToDoDefinition } from '../../types/pkg/ToDo/presenter/todo';

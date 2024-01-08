@@ -14,3 +14,9 @@ export async function updateItem(item: {
   await client.updateItem(item);
   revalidatePath('/todo');
 }
+
+export async function deleteItem(itemId: string) {
+  const client = createClient(ToDoDefinition, createChannel(BACKEND_END_POINT));
+  await client.deleteItem({ itemId });
+  revalidatePath('/todo');
+}

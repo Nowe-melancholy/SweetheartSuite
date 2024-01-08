@@ -1,7 +1,7 @@
 import { createChannel, createClient } from 'nice-grpc';
 import { ToDoDefinition } from '../../../../types/pkg/ToDo/presenter/todo';
 import { BACKEND_END_POINT } from '../../../const/const';
-import { EditToDoItem } from './_component/edit';
+import { EditItem } from './_component/EditItem';
 
 const fetch = async (itemId: string) => {
   const channel = createChannel(BACKEND_END_POINT);
@@ -18,7 +18,7 @@ export default async function Page({
   const { title, description } = await fetch(itemId);
   return (
     <div className={'flex justify-center'}>
-      <EditToDoItem itemId={itemId} title={title} description={description} />
+      <EditItem itemId={itemId} title={title} description={description} />
     </div>
   );
 }

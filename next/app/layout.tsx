@@ -1,6 +1,6 @@
-import { css } from '../styled-system/css';
 import './globals.css';
 import { NextAuthProvider } from './NextAuthProvider';
+import { Logout } from '@/components/Logout';
 
 export const metadata = {
   title: 'Next.js',
@@ -11,14 +11,20 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang='ja'>
       <body>
-        <div className={'flex flex-col'}>
-          <div className={'h-16 p-1 mb-8 text-3xl text-white bg-black'}>
-            SweetHeartSuite
-          </div>
-          <NextAuthProvider>
+        <NextAuthProvider>
+          <div className={'flex flex-col'}>
+            <div
+              className={
+                'flex items-center h-16 p-1 mb-8 text-3xl text-white bg-black'
+              }
+            >
+              SweetHeartSuite
+              <Logout />
+            </div>
+
             <div>{children}</div>
-          </NextAuthProvider>
-        </div>
+          </div>
+        </NextAuthProvider>
       </body>
     </html>
   );

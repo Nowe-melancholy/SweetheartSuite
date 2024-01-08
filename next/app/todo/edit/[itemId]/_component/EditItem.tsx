@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { updateItem } from './action';
+import { deleteItem, updateItem } from './action';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ type Props = {
   description: string;
 };
 
-export const EditToDoItem = ({ itemId, title, description }: Props) => {
+export const EditItem = ({ itemId, title, description }: Props) => {
   const router = useRouter();
 
   const { register, handleSubmit } = useForm<FormData>({
@@ -30,6 +30,11 @@ export const EditToDoItem = ({ itemId, title, description }: Props) => {
     router.push('/todo');
   };
 
+  const onClick = async () => {
+    await deleteItem(itemId);
+    router.push('/todo');
+  };
+
   return (
     <Card className='w-96'>
       <CardContent>
@@ -42,6 +47,9 @@ export const EditToDoItem = ({ itemId, title, description }: Props) => {
             <Button className='mt-2'>保存</Button>
           </div>
         </form>
+        <Button className='mt-2 w-full' onClick={onClick}>
+          削除
+        </Button>
       </CardContent>
     </Card>
   );
