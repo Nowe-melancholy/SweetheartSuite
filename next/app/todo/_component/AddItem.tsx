@@ -2,10 +2,8 @@
 
 import { useForm } from 'react-hook-form';
 import { addToDoItem } from './action';
-import { InputText } from '../../_components/InputText';
-import { flex } from '../../../styled-system/patterns';
-import { css } from '../../../styled-system/css';
-import { BUtton } from '../../_components/Button';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 export const AddItem = () => {
   const { register, handleSubmit } = useForm<FormData>();
@@ -16,15 +14,13 @@ export const AddItem = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className={flex({ alignItems: 'center' })}>
-        <div className={css({ width: '300px' })}>
-          <InputText {...register('title')} placeholder='やりたいこと' />
-        </div>
-        <div
-          className={css({ height: '30px', width: '50px', marginLeft: '10px' })}
-        >
-          <BUtton value='作成' />
-        </div>
+      <div className={'flex mt-2'}>
+        <Input
+          className='mr-2'
+          {...register('title')}
+          placeholder='やりたいこと'
+        />
+        <Button>作成</Button>
       </div>
     </form>
   );

@@ -11,22 +11,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang='ja'>
       <body>
-        <div
-          className={css({
-            display: 'flex',
-            flexDirection: 'column',
-            height: 'full',
-            width: 'full',
-            justifyContent: 'center',
-          })}
-        >
-          <div
-            className={css({
-              fontSize: '24px',
-              border: '1px solid #e0d0de',
-              backgroundColor: '#e0d0de',
-            })}
-          >
+        <div className={'flex flex-col'}>
+          <div className={'h-16 p-1 mb-8 text-3xl text-white bg-black'}>
             SweetHeartSuite
           </div>
           <NextAuthProvider>

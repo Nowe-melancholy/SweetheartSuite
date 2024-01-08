@@ -3,11 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { updateItem } from './action';
-import { stack } from '../../../../../styled-system/patterns';
-import { InputText } from '../../../../_components/InputText';
-import { css } from '../../../../../styled-system/css';
-import { Textarea } from '../../../../_components/Textarea';
-import { BUtton } from '../../../../_components/Button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 type Props = {
   itemId: string;
@@ -32,24 +31,19 @@ export const EditToDoItem = ({ itemId, title, description }: Props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className={stack()}>
-        <label>タイトル</label>
-        <InputText {...register('title')} />
-        <label>概要</label>
-        <div className={css({ height: '150px' })}>
-          <Textarea {...register('description')} />
-        </div>
-        <div
-          className={css({
-            height: '30px',
-            width: '50px',
-          })}
-        >
-          <BUtton value='保存' />
-        </div>
-      </div>
-    </form>
+    <Card className='w-96'>
+      <CardContent>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className={'flex flex-col'}>
+            <label className='mt-2'>タイトル</label>
+            <Input className='mt-2 mb-4' {...register('title')} />
+            <label>概要</label>
+            <Textarea className='mt-2 mb-4 h-36' {...register('description')} />
+            <Button className='mt-2'>保存</Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
