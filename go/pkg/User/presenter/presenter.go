@@ -87,7 +87,8 @@ func (presenter *presenter) GetUserByMailAddress(
 	}
 
 	if user == nil {
-		return nil, nil
+		res := connect.NewResponse(&GetUserByMailAddressResponse{})
+		return res, nil
 	}
 
 	res := connect.NewResponse(&GetUserByMailAddressResponse{
