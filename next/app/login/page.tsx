@@ -8,7 +8,7 @@ export default function Login() {
   return (
     <div className='flex justify-center'>
       <Card className='w-96 h-96 flex items-center justify-center'>
-        <Button onClick={() => signIn('google')}>
+        <Button onClick={() => signIn('google', { callbackUrl: '/todo' })}>
           Googleアカウントでログイン
         </Button>
       </Card>

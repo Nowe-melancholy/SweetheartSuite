@@ -6,8 +6,11 @@ import (
 	userMigration "SweetheartSuite/v2/pkg/User/migration"
 	userPresenter "SweetheartSuite/v2/pkg/User/presenter"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
+	"github.com/joho/godotenv"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
@@ -19,6 +22,13 @@ import (
 
 func main() {
 	fmt.Println("Starting Sweetheart Suite...")
+
+	if os.Getenv("GO_ENV") != "production" {
+		if err := godotenv.Load(); err != nil {
+			log.Fatal(err)
+			panic(err)
+		}
+	}
 
 	fmt.Println("Initializing todo schema...")
 	todoMigration.Init()

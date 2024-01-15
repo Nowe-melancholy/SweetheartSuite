@@ -6,8 +6,10 @@ import (
 	"SweetheartSuite/v2/pkg/User/internal/usecase"
 	"context"
 	"fmt"
+	"os"
 
 	"connectrpc.com/connect"
+	"github.com/dgrijalva/jwt-go"
 )
 
 type Presenter interface {
@@ -67,6 +69,18 @@ func (presenter *presenter) AddUser(
 		UserId: userId,
 	})
 
+	// JWTトークン作成
+	jwtKey := os.Getenv("JWT_KEY")
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["userId"] = userId
+	signedToken, err := token.SignedString([]byte(jwtKey))
+	if err != nil {
+		fmt.Println("Error in sign JWT token")
+		panic(err)
+	}
+	res.Header().Set("Authorization", "Bearer " + signedToken)
+
 	return res, nil
 }
 
@@ -97,6 +111,18 @@ func (presenter *presenter) GetUserByMailAddress(
 		MailAddress: user.MailAddress(),
 		Gender: Gender(user.Gender()),
 	})
+
+	// JWTトークン作成
+	jwtKey := os.Getenv("JWT_KEY")
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["userId"] = user.ID()
+	signedToken, err := token.SignedString([]byte(jwtKey))
+	if err != nil {
+		fmt.Println("Error in sign JWT token")
+		panic(err)
+	}
+	res.Header().Set("Authorization", "Bearer " + signedToken)
 
 	return res, nil
 }
