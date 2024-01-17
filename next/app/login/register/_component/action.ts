@@ -1,6 +1,6 @@
 'use server';
 
-import { Jender } from './../../../../const/Jender';
+import { Gender } from '../../../../const/Gender';
 import { createChannel, createClient } from 'nice-grpc';
 import { UserDefinition } from '../../../../types/pkg/User/presenter/user';
 import { BACKEND_END_POINT } from '../../../const/const';
@@ -10,7 +10,7 @@ import { cookies } from 'next/headers';
 export async function registerUser(user: {
   mailAddress: string;
   name: string;
-  jender: Jender;
+  gender: Gender;
 }) {
   const client = createClient(UserDefinition, createChannel(BACKEND_END_POINT));
   let auth: string | undefined;

@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useForm } from 'react-hook-form';
-import { Jender } from '../../../../const/Jender';
+import { Jender } from '../../../../const/Gender';
 import { registerUser } from './action';
 import { useRouter, useSearchParams } from 'next/navigation';
 

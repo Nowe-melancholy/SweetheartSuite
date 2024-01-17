@@ -41,6 +41,10 @@ func NewUser(id string, name string, mailAddress string, gender common.Gender) (
 		return nil, errors.New("mailAddress cannot be empty")
 	}
 
+	if gender.String() == "UNKNOWN" {
+		return nil, errors.New("gender cannot be UNKNOWN")
+	}
+
 	return &User{
 		id:     id,
 		name:   name,
