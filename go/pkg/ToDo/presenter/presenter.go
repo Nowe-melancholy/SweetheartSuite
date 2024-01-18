@@ -1,6 +1,7 @@
 package presenter
 
 import (
+	authPresenter "SweetheartSuite/v2/pkg/Auth/presenter"
 	"SweetheartSuite/v2/pkg/ToDo/internal/infra"
 	"SweetheartSuite/v2/pkg/ToDo/internal/usecase"
 	"context"
@@ -92,6 +93,16 @@ func (presenter *presenter) AddItem(
 	req *connect.Request[AddItemRequest],
 ) (*connect.Response[AddItemResponse], error) {
 	fmt.Println("Add item presenter called")
+
+	token := req.Header().Get("Authorization")
+	userId, err := authPresenter.ValidateJWT(ctx, token)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	fmt.Println("User id: ", userId)
+
+	fmt.Println("Add item")
 	itemId, err := presenter.addItemUsecase.Execute(ctx, req.Msg.CoupleId, req.Msg.Title, req.Msg.Description)
 	if err != nil {
 		fmt.Println("Error in add item presenter")
