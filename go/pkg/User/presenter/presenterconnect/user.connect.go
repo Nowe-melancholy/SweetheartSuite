@@ -38,12 +38,15 @@ const (
 	// UserGetUserByMailAddressProcedure is the fully-qualified name of the User's GetUserByMailAddress
 	// RPC.
 	UserGetUserByMailAddressProcedure = "/SweetheartSuite.v2.User/GetUserByMailAddress"
+	// UserGetCoupleByUserIdProcedure is the fully-qualified name of the User's GetCoupleByUserId RPC.
+	UserGetCoupleByUserIdProcedure = "/SweetheartSuite.v2.User/GetCoupleByUserId"
 )
 
 // UserClient is a client for the SweetheartSuite.v2.User service.
 type UserClient interface {
 	AddUser(context.Context, *connect.Request[presenter.AddUserRequest]) (*connect.Response[presenter.AddUserResponse], error)
 	GetUserByMailAddress(context.Context, *connect.Request[presenter.GetUserByMailAddressRequest]) (*connect.Response[presenter.GetUserByMailAddressResponse], error)
+	GetCoupleByUserId(context.Context, *connect.Request[presenter.GetCoupleByUserIdRequest]) (*connect.Response[presenter.GetCoupleByUserIdResponse], error)
 }
 
 // NewUserClient constructs a client for the SweetheartSuite.v2.User service. By default, it uses
@@ -66,6 +69,11 @@ func NewUserClient(httpClient connect.HTTPClient, baseURL string, opts ...connec
 			baseURL+UserGetUserByMailAddressProcedure,
 			opts...,
 		),
+		getCoupleByUserId: connect.NewClient[presenter.GetCoupleByUserIdRequest, presenter.GetCoupleByUserIdResponse](
+			httpClient,
+			baseURL+UserGetCoupleByUserIdProcedure,
+			opts...,
+		),
 	}
 }
 
@@ -73,6 +81,7 @@ func NewUserClient(httpClient connect.HTTPClient, baseURL string, opts ...connec
 type userClient struct {
 	addUser              *connect.Client[presenter.AddUserRequest, presenter.AddUserResponse]
 	getUserByMailAddress *connect.Client[presenter.GetUserByMailAddressRequest, presenter.GetUserByMailAddressResponse]
+	getCoupleByUserId    *connect.Client[presenter.GetCoupleByUserIdRequest, presenter.GetCoupleByUserIdResponse]
 }
 
 // AddUser calls SweetheartSuite.v2.User.AddUser.
@@ -85,10 +94,16 @@ func (c *userClient) GetUserByMailAddress(ctx context.Context, req *connect.Requ
 	return c.getUserByMailAddress.CallUnary(ctx, req)
 }
 
+// GetCoupleByUserId calls SweetheartSuite.v2.User.GetCoupleByUserId.
+func (c *userClient) GetCoupleByUserId(ctx context.Context, req *connect.Request[presenter.GetCoupleByUserIdRequest]) (*connect.Response[presenter.GetCoupleByUserIdResponse], error) {
+	return c.getCoupleByUserId.CallUnary(ctx, req)
+}
+
 // UserHandler is an implementation of the SweetheartSuite.v2.User service.
 type UserHandler interface {
 	AddUser(context.Context, *connect.Request[presenter.AddUserRequest]) (*connect.Response[presenter.AddUserResponse], error)
 	GetUserByMailAddress(context.Context, *connect.Request[presenter.GetUserByMailAddressRequest]) (*connect.Response[presenter.GetUserByMailAddressResponse], error)
+	GetCoupleByUserId(context.Context, *connect.Request[presenter.GetCoupleByUserIdRequest]) (*connect.Response[presenter.GetCoupleByUserIdResponse], error)
 }
 
 // NewUserHandler builds an HTTP handler from the service implementation. It returns the path on
@@ -107,12 +122,19 @@ func NewUserHandler(svc UserHandler, opts ...connect.HandlerOption) (string, htt
 		svc.GetUserByMailAddress,
 		opts...,
 	)
+	userGetCoupleByUserIdHandler := connect.NewUnaryHandler(
+		UserGetCoupleByUserIdProcedure,
+		svc.GetCoupleByUserId,
+		opts...,
+	)
 	return "/SweetheartSuite.v2.User/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UserAddUserProcedure:
 			userAddUserHandler.ServeHTTP(w, r)
 		case UserGetUserByMailAddressProcedure:
 			userGetUserByMailAddressHandler.ServeHTTP(w, r)
+		case UserGetCoupleByUserIdProcedure:
+			userGetCoupleByUserIdHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -128,4 +150,8 @@ func (UnimplementedUserHandler) AddUser(context.Context, *connect.Request[presen
 
 func (UnimplementedUserHandler) GetUserByMailAddress(context.Context, *connect.Request[presenter.GetUserByMailAddressRequest]) (*connect.Response[presenter.GetUserByMailAddressResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.User.GetUserByMailAddress is not implemented"))
+}
+
+func (UnimplementedUserHandler) GetCoupleByUserId(context.Context, *connect.Request[presenter.GetCoupleByUserIdRequest]) (*connect.Response[presenter.GetCoupleByUserIdResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("SweetheartSuite.v2.User.GetCoupleByUserId is not implemented"))
 }

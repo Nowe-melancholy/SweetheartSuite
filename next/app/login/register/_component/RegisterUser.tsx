@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useForm } from 'react-hook-form';
-import { Jender } from '../../../../const/Gender';
+import { Gender } from '../../../../const/Gender';
 import { registerUser } from './action';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -30,7 +30,7 @@ export const RegisterUser = () => {
 
   const onSubmit = async (data: FormData) => {
     await registerUser(data);
-    router.push('/todo');
+    router.push('/');
   };
 
   return (
@@ -53,7 +53,7 @@ export const RegisterUser = () => {
             <SelectTrigger className='w-[180px]  m-2'>
               <SelectValue placeholder='性別' />
             </SelectTrigger>
-            <SelectContent {...register('jender')}>
+            <SelectContent {...register('gender')}>
               <SelectItem value='1'>男性</SelectItem>
               <SelectItem value='2'>女性</SelectItem>
             </SelectContent>
@@ -71,5 +71,5 @@ export const RegisterUser = () => {
 type FormData = {
   mailAddress: string;
   name: string;
-  jender: Jender;
+  gender: Gender;
 };

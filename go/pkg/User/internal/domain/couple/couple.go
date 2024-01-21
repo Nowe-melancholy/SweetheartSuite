@@ -1,9 +1,5 @@
 package couple
 
-import (
-	"github.com/google/uuid"
-)
-
 type Couple struct {
 	id      string
 	manId   string
@@ -14,10 +10,20 @@ func (c *Couple) ID() string {
 	return c.id
 }
 
-func NewCouple(manId string, womanId string) *Couple {
+func (c *Couple) ManId() string {
+	return c.manId
+}
+
+func (c *Couple) WomanId() string {
+	return c.womanId
+}
+
+
+func NewCouple(id string, manId string, womanId string) *Couple {
 	return &Couple{
-		id:      uuid.New().String(),
+		id:      id,
 		manId:   manId,
 		womanId: womanId,
 	}
 }
+
