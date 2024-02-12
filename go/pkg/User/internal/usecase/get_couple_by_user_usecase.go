@@ -1,13 +1,12 @@
 package usecase
 
 import (
-	"SweetheartSuite/v2/pkg/User/common"
 	"SweetheartSuite/v2/pkg/User/internal/domain/couple"
 	"context"
 )
 
 type GetCoupleByUserUsecase interface {
-	Execute(ctx context.Context, userId string, gender common.Gender) (coupleId string, err error)
+	Execute(ctx context.Context, userId string) (coupleId string, err error)
 }
 
 type getCoupleByUserUsecase struct {
@@ -23,11 +22,14 @@ func NewGetCoupleByUserUsecase(coupleRepo couple.CoupleIRepository) GetCoupleByU
 func (usecase *getCoupleByUserUsecase) Execute(
 	ctx context.Context,
 	userId string,
-	gender common.Gender,
 ) (coupleId string, err error) {
-	coupleModel, err := usecase.coupleRepo.FindByUserId(userId, gender)
+	coupleModel, err := usecase.coupleRepo.FindByUserId(userId)
 	if err != nil {
 		return "", err
+	}
+
+	if coupleModel == nil {
+		return "", nil
 	}
 
 	return coupleModel.ID(), nil

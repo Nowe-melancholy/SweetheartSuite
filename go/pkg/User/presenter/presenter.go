@@ -1,6 +1,7 @@
 package presenter
 
 import (
+	authPresenter "SweetheartSuite/v2/pkg/Auth/presenter"
 	"SweetheartSuite/v2/pkg/User/common"
 	"SweetheartSuite/v2/pkg/User/internal/infra"
 	"SweetheartSuite/v2/pkg/User/internal/usecase"
@@ -21,17 +22,23 @@ type Presenter interface {
 		ctx context.Context,
 		req *connect.Request[GetUserByMailAddressRequest],
 	)(*connect.Response[GetUserByMailAddressResponse], error)
+	GetCouple(
+		ctx context.Context,
+		req *connect.Request[GetCoupleRequest],
+	)(*connect.Response[GetCoupleResponse], error)
 }
 
 type presenter struct {
 	addUserUsecase usecase.AddUserUsecase
 	getUserByMailAddressUsecase usecase.GetUserByMailAddressUsecase
+	getCoupleByUserUsecase usecase.GetCoupleByUserUsecase
 }
 
 func NewPresenter() Presenter {
 	db := infra.InitUserDB()
 
 	userRepo := infra.NewUserRepository(db)
+	coupleRepo := infra.NewCoupleRepository(db)
 
 	addUserUsecase := usecase.NewAddUserUsecase(
 		userRepo,
@@ -41,9 +48,14 @@ func NewPresenter() Presenter {
 		userRepo,
 	)
 
+	getCoupleByUserUsecase := usecase.NewGetCoupleByUserUsecase(
+		coupleRepo,
+	)
+
 	return &presenter{
 		addUserUsecase: addUserUsecase,
 		getUserByMailAddressUsecase: getUserByMailAddressUsecase,
+		getCoupleByUserUsecase: getCoupleByUserUsecase,
 	}
 }
 
@@ -123,6 +135,36 @@ func (presenter *presenter) GetUserByMailAddress(
 		panic(err)
 	}
 	res.Header().Set("Authorization", "Bearer " + signedToken)
+
+	return res, nil
+}
+
+func (presenter *presenter) GetCouple(
+	ctx context.Context,
+	req *connect.Request[GetCoupleRequest],
+)(*connect.Response[GetCoupleResponse], error) {
+	fmt.Println("Get couple presenter")
+	userId, err := authPresenter.ValidateJWT(ctx, req.Header().Get("Authorization"))
+	if err != nil {
+		fmt.Println("Error in get couple presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+
+	coupleId, err := presenter.getCoupleByUserUsecase.Execute(
+		ctx,
+		userId,
+	)
+
+	if err != nil {
+		fmt.Println("Error in get couple presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+	
+	res := connect.NewResponse(&GetCoupleResponse{
+		CoupleId: coupleId,
+	})
 
 	return res, nil
 }

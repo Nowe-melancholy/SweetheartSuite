@@ -59,6 +59,4 @@ func main() {
 		"0.0.0.0:8080",
 		h2c.NewHandler(mux, &http2.Server{}),
 	)
-
-	fmt.Println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 }

@@ -1,8 +1,8 @@
 package infra
 
 import (
-	"SweetheartSuite/v2/pkg/User/common"
 	"SweetheartSuite/v2/pkg/User/internal/domain/couple"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -33,17 +33,12 @@ func (repo *coupleRepository) Create(couple *couple.Couple) error {
 	return nil
 }
 
-func (repo *coupleRepository) FindByUserId(userId string, gender common.Gender) (*couple.Couple, error) {
+func (repo *coupleRepository) FindByUserId(userId string) (*couple.Couple, error) {
 	var coupleData Couple
-	var result = repo.db
-	if gender == common.MAN {
-		result = result.Where("man_id = ?", userId).First(&coupleData)
-	} else {
-		result = result.Where("woman_id = ?", userId).First(&coupleData)
-	}
+	var result = repo.db.Where("man_id = ?", userId).Or("woman_id = ?", userId).First(&coupleData)
 
-	if result.Error != nil {
-		return nil, result.Error
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, nil
 	}
 
 	var coupleModel = couple.NewCouple(coupleData.ID, coupleData.ManId, coupleData.WomanId)

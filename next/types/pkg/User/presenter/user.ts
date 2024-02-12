@@ -3,15 +3,15 @@ import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "SweetheartSuite.v2";
 
-export const Gender = { UNDEFINED: 0, MAN: 1, WOMAN: 2, UNRECOGNIZED: -1 } as const;
+export const Gender = { GENDER_UNKNOWN: 0, MAN: 1, WOMAN: 2, UNRECOGNIZED: -1 } as const;
 
 export type Gender = typeof Gender[keyof typeof Gender];
 
 export function genderFromJSON(object: any): Gender {
   switch (object) {
     case 0:
-    case "UNDEFINED":
-      return Gender.UNDEFINED;
+    case "GENDER_UNKNOWN":
+      return Gender.GENDER_UNKNOWN;
     case 1:
     case "MAN":
       return Gender.MAN;
@@ -27,8 +27,8 @@ export function genderFromJSON(object: any): Gender {
 
 export function genderToJSON(object: Gender): string {
   switch (object) {
-    case Gender.UNDEFINED:
-      return "UNDEFINED";
+    case Gender.GENDER_UNKNOWN:
+      return "GENDER_UNKNOWN";
     case Gender.MAN:
       return "MAN";
     case Gender.WOMAN:
@@ -58,6 +58,13 @@ export interface GetUserByMailAddressResponse {
   name: string;
   mailAddress: string;
   gender: Gender;
+}
+
+export interface GetCoupleRequest {
+}
+
+export interface GetCoupleResponse {
+  coupleId: string;
 }
 
 function createBaseAddUserRequest(): AddUserRequest {
@@ -367,6 +374,106 @@ export const GetUserByMailAddressResponse = {
   },
 };
 
+function createBaseGetCoupleRequest(): GetCoupleRequest {
+  return {};
+}
+
+export const GetCoupleRequest = {
+  encode(_: GetCoupleRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetCoupleRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetCoupleRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): GetCoupleRequest {
+    return {};
+  },
+
+  toJSON(_: GetCoupleRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create(base?: DeepPartial<GetCoupleRequest>): GetCoupleRequest {
+    return GetCoupleRequest.fromPartial(base ?? {});
+  },
+  fromPartial(_: DeepPartial<GetCoupleRequest>): GetCoupleRequest {
+    const message = createBaseGetCoupleRequest();
+    return message;
+  },
+};
+
+function createBaseGetCoupleResponse(): GetCoupleResponse {
+  return { coupleId: "" };
+}
+
+export const GetCoupleResponse = {
+  encode(message: GetCoupleResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.coupleId !== "") {
+      writer.uint32(10).string(message.coupleId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetCoupleResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetCoupleResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.coupleId = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetCoupleResponse {
+    return { coupleId: isSet(object.coupleId) ? String(object.coupleId) : "" };
+  },
+
+  toJSON(message: GetCoupleResponse): unknown {
+    const obj: any = {};
+    if (message.coupleId !== "") {
+      obj.coupleId = message.coupleId;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<GetCoupleResponse>): GetCoupleResponse {
+    return GetCoupleResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetCoupleResponse>): GetCoupleResponse {
+    const message = createBaseGetCoupleResponse();
+    message.coupleId = object.coupleId ?? "";
+    return message;
+  },
+};
+
 export type UserDefinition = typeof UserDefinition;
 export const UserDefinition = {
   name: "User",
@@ -385,6 +492,14 @@ export const UserDefinition = {
       requestType: GetUserByMailAddressRequest,
       requestStream: false,
       responseType: GetUserByMailAddressResponse,
+      responseStream: false,
+      options: {},
+    },
+    getCouple: {
+      name: "GetCouple",
+      requestType: GetCoupleRequest,
+      requestStream: false,
+      responseType: GetCoupleResponse,
       responseStream: false,
       options: {},
     },
