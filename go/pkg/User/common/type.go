@@ -17,3 +17,24 @@ func (g Gender) String() string {
 		return "UNKNOWN"
 	}
 }
+
+type RequestStatus int
+
+const (
+	PENDING RequestStatus = iota + 1
+	ACCEPTED
+	REJECTED
+)
+
+func (r RequestStatus) String() string {
+	switch r {
+	case PENDING:
+		return "PENDING"
+	case ACCEPTED:
+		return "ACCEPTED"
+	case REJECTED:
+		return "REJECTED"
+	default:
+		return "UNKNOWN"
+	}
+}

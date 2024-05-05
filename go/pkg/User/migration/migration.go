@@ -38,7 +38,7 @@ func Init() {
 		panic(err)
 	}
 
-	db.AutoMigrate(&infra.User{}, &infra.Couple{})
+	db.AutoMigrate(&infra.User{}, &infra.Couple{}, &infra.Request{})
 
 	fmt.Println("Database initialized")
 }

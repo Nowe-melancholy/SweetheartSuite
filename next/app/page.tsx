@@ -1,19 +1,11 @@
-import { Metadata } from 'nice-grpc';
-import { cookies } from 'next/headers';
 import { createUserClient } from '@/lib/client';
+import { NoCouple } from './_component/NoCouple';
 
 export default async function Home() {
   const client = createUserClient();
-  const couple = await client.getCouple(
-    {},
-    {
-      metadata: Metadata({
-        Authorization: cookies().get('Authorization')?.value ?? '',
-      }),
-    }
-  );
+  const couple = await client.getCouple({});
 
-  if (!couple.coupleId) return <>No Couple</>;
+  if (!couple.coupleId) return <NoCouple />;
 
   return (
     <>

@@ -10,7 +10,9 @@ import (
 type Couple struct {
 	ID      string
 	ManId   string
+	Man    User `gorm:"foreignKey:ManId"`
 	WomanId string
+	Woman  User `gorm:"foreignKey:WomanId"`
 }
 
 type coupleRepository struct {

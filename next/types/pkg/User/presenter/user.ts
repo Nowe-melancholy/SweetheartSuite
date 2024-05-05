@@ -39,6 +39,53 @@ export function genderToJSON(object: Gender): string {
   }
 }
 
+export const RequestStatus = {
+  REQUEST_STATUS_UNKNOWN: 0,
+  REQUEST_STATUS_PENDING: 1,
+  REQUEST_STATUS_ACCEPTED: 2,
+  REQUEST_STATUS_REJECTED: 3,
+  UNRECOGNIZED: -1,
+} as const;
+
+export type RequestStatus = typeof RequestStatus[keyof typeof RequestStatus];
+
+export function requestStatusFromJSON(object: any): RequestStatus {
+  switch (object) {
+    case 0:
+    case "REQUEST_STATUS_UNKNOWN":
+      return RequestStatus.REQUEST_STATUS_UNKNOWN;
+    case 1:
+    case "REQUEST_STATUS_PENDING":
+      return RequestStatus.REQUEST_STATUS_PENDING;
+    case 2:
+    case "REQUEST_STATUS_ACCEPTED":
+      return RequestStatus.REQUEST_STATUS_ACCEPTED;
+    case 3:
+    case "REQUEST_STATUS_REJECTED":
+      return RequestStatus.REQUEST_STATUS_REJECTED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return RequestStatus.UNRECOGNIZED;
+  }
+}
+
+export function requestStatusToJSON(object: RequestStatus): string {
+  switch (object) {
+    case RequestStatus.REQUEST_STATUS_UNKNOWN:
+      return "REQUEST_STATUS_UNKNOWN";
+    case RequestStatus.REQUEST_STATUS_PENDING:
+      return "REQUEST_STATUS_PENDING";
+    case RequestStatus.REQUEST_STATUS_ACCEPTED:
+      return "REQUEST_STATUS_ACCEPTED";
+    case RequestStatus.REQUEST_STATUS_REJECTED:
+      return "REQUEST_STATUS_REJECTED";
+    case RequestStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export interface AddUserRequest {
   name: string;
   mailAddress: string;
@@ -65,6 +112,24 @@ export interface GetCoupleRequest {
 
 export interface GetCoupleResponse {
   coupleId: string;
+}
+
+export interface GetRequestByToUserIdRequest {
+}
+
+export interface GetRequestByToUserIdResponse {
+  id: string;
+  fromUserId: string;
+  status: RequestStatus;
+}
+
+export interface GetRequestByFromUserIdRequest {
+}
+
+export interface GetRequestByFromUserIdResponse {
+  id: string;
+  toUserId: string;
+  status: RequestStatus;
 }
 
 function createBaseAddUserRequest(): AddUserRequest {
@@ -474,6 +539,270 @@ export const GetCoupleResponse = {
   },
 };
 
+function createBaseGetRequestByToUserIdRequest(): GetRequestByToUserIdRequest {
+  return {};
+}
+
+export const GetRequestByToUserIdRequest = {
+  encode(_: GetRequestByToUserIdRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetRequestByToUserIdRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetRequestByToUserIdRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): GetRequestByToUserIdRequest {
+    return {};
+  },
+
+  toJSON(_: GetRequestByToUserIdRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create(base?: DeepPartial<GetRequestByToUserIdRequest>): GetRequestByToUserIdRequest {
+    return GetRequestByToUserIdRequest.fromPartial(base ?? {});
+  },
+  fromPartial(_: DeepPartial<GetRequestByToUserIdRequest>): GetRequestByToUserIdRequest {
+    const message = createBaseGetRequestByToUserIdRequest();
+    return message;
+  },
+};
+
+function createBaseGetRequestByToUserIdResponse(): GetRequestByToUserIdResponse {
+  return { id: "", fromUserId: "", status: 0 };
+}
+
+export const GetRequestByToUserIdResponse = {
+  encode(message: GetRequestByToUserIdResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.fromUserId !== "") {
+      writer.uint32(18).string(message.fromUserId);
+    }
+    if (message.status !== 0) {
+      writer.uint32(24).int32(message.status);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetRequestByToUserIdResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetRequestByToUserIdResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.fromUserId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.status = reader.int32() as any;
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetRequestByToUserIdResponse {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      fromUserId: isSet(object.fromUserId) ? String(object.fromUserId) : "",
+      status: isSet(object.status) ? requestStatusFromJSON(object.status) : 0,
+    };
+  },
+
+  toJSON(message: GetRequestByToUserIdResponse): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.fromUserId !== "") {
+      obj.fromUserId = message.fromUserId;
+    }
+    if (message.status !== 0) {
+      obj.status = requestStatusToJSON(message.status);
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<GetRequestByToUserIdResponse>): GetRequestByToUserIdResponse {
+    return GetRequestByToUserIdResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetRequestByToUserIdResponse>): GetRequestByToUserIdResponse {
+    const message = createBaseGetRequestByToUserIdResponse();
+    message.id = object.id ?? "";
+    message.fromUserId = object.fromUserId ?? "";
+    message.status = object.status ?? 0;
+    return message;
+  },
+};
+
+function createBaseGetRequestByFromUserIdRequest(): GetRequestByFromUserIdRequest {
+  return {};
+}
+
+export const GetRequestByFromUserIdRequest = {
+  encode(_: GetRequestByFromUserIdRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetRequestByFromUserIdRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetRequestByFromUserIdRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): GetRequestByFromUserIdRequest {
+    return {};
+  },
+
+  toJSON(_: GetRequestByFromUserIdRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create(base?: DeepPartial<GetRequestByFromUserIdRequest>): GetRequestByFromUserIdRequest {
+    return GetRequestByFromUserIdRequest.fromPartial(base ?? {});
+  },
+  fromPartial(_: DeepPartial<GetRequestByFromUserIdRequest>): GetRequestByFromUserIdRequest {
+    const message = createBaseGetRequestByFromUserIdRequest();
+    return message;
+  },
+};
+
+function createBaseGetRequestByFromUserIdResponse(): GetRequestByFromUserIdResponse {
+  return { id: "", toUserId: "", status: 0 };
+}
+
+export const GetRequestByFromUserIdResponse = {
+  encode(message: GetRequestByFromUserIdResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.toUserId !== "") {
+      writer.uint32(18).string(message.toUserId);
+    }
+    if (message.status !== 0) {
+      writer.uint32(24).int32(message.status);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetRequestByFromUserIdResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetRequestByFromUserIdResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.toUserId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.status = reader.int32() as any;
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetRequestByFromUserIdResponse {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      toUserId: isSet(object.toUserId) ? String(object.toUserId) : "",
+      status: isSet(object.status) ? requestStatusFromJSON(object.status) : 0,
+    };
+  },
+
+  toJSON(message: GetRequestByFromUserIdResponse): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.toUserId !== "") {
+      obj.toUserId = message.toUserId;
+    }
+    if (message.status !== 0) {
+      obj.status = requestStatusToJSON(message.status);
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<GetRequestByFromUserIdResponse>): GetRequestByFromUserIdResponse {
+    return GetRequestByFromUserIdResponse.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<GetRequestByFromUserIdResponse>): GetRequestByFromUserIdResponse {
+    const message = createBaseGetRequestByFromUserIdResponse();
+    message.id = object.id ?? "";
+    message.toUserId = object.toUserId ?? "";
+    message.status = object.status ?? 0;
+    return message;
+  },
+};
+
 export type UserDefinition = typeof UserDefinition;
 export const UserDefinition = {
   name: "User",
@@ -500,6 +829,22 @@ export const UserDefinition = {
       requestType: GetCoupleRequest,
       requestStream: false,
       responseType: GetCoupleResponse,
+      responseStream: false,
+      options: {},
+    },
+    getRequestByToUserId: {
+      name: "GetRequestByToUserId",
+      requestType: GetRequestByToUserIdRequest,
+      requestStream: false,
+      responseType: GetRequestByToUserIdResponse,
+      responseStream: false,
+      options: {},
+    },
+    getRequestByFromUserId: {
+      name: "GetRequestByFromUserId",
+      requestType: GetRequestByFromUserIdRequest,
+      requestStream: false,
+      responseType: GetRequestByFromUserIdResponse,
       responseStream: false,
       options: {},
     },

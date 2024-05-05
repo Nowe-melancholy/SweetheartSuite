@@ -26,12 +26,22 @@ type Presenter interface {
 		ctx context.Context,
 		req *connect.Request[GetCoupleRequest],
 	)(*connect.Response[GetCoupleResponse], error)
+	GetRequestByToUserId(
+		ctx context.Context,
+		req *connect.Request[GetRequestByToUserIdRequest],
+	)(*connect.Response[GetRequestByToUserIdResponse], error)
+	GetRequestByFromUserId(
+		ctx context.Context,
+		req *connect.Request[GetRequestByFromUserIdRequest],
+	)(*connect.Response[GetRequestByFromUserIdResponse], error)
 }
 
 type presenter struct {
 	addUserUsecase usecase.AddUserUsecase
 	getUserByMailAddressUsecase usecase.GetUserByMailAddressUsecase
 	getCoupleByUserUsecase usecase.GetCoupleByUserUsecase
+	getRequestByToUserUsecase usecase.GetRequestByToUserUsecase
+	getRequestByFromUserUsecase usecase.GetRequestByFromUserUsecase
 }
 
 func NewPresenter() Presenter {
@@ -39,6 +49,7 @@ func NewPresenter() Presenter {
 
 	userRepo := infra.NewUserRepository(db)
 	coupleRepo := infra.NewCoupleRepository(db)
+	requestRepo := infra.NewRequestRepository(db)
 
 	addUserUsecase := usecase.NewAddUserUsecase(
 		userRepo,
@@ -52,10 +63,20 @@ func NewPresenter() Presenter {
 		coupleRepo,
 	)
 
+	getRequestByToUser := usecase.NewGetRequestByToUserUsecase(
+		requestRepo,
+	)
+
+	getRequestByFromUser := usecase.NewGetRequestByFromUserUsecase(
+		requestRepo,
+	)
+
 	return &presenter{
 		addUserUsecase: addUserUsecase,
 		getUserByMailAddressUsecase: getUserByMailAddressUsecase,
 		getCoupleByUserUsecase: getCoupleByUserUsecase,
+		getRequestByToUserUsecase: getRequestByToUser,
+		getRequestByFromUserUsecase: getRequestByFromUser,
 	}
 }
 
@@ -164,6 +185,80 @@ func (presenter *presenter) GetCouple(
 	
 	res := connect.NewResponse(&GetCoupleResponse{
 		CoupleId: coupleId,
+	})
+
+	return res, nil
+}
+
+func (presenter *presenter) GetRequestByToUserId(
+	ctx context.Context,
+	req *connect.Request[GetRequestByToUserIdRequest],
+)(*connect.Response[GetRequestByToUserIdResponse], error) {
+	fmt.Println("Get request by to user id presenter")
+	userId, err := authPresenter.ValidateJWT(ctx, req.Header().Get("Authorization"))
+	if err != nil {
+		fmt.Println("Error in get request by to user id presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+
+	request, err := presenter.getRequestByToUserUsecase.Execute(
+		ctx,
+		userId,
+	)
+
+	if err != nil {
+		fmt.Println("Error in get request by to user id presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+
+	if request == nil {
+		res := connect.NewResponse(&GetRequestByToUserIdResponse{})
+		return res, nil
+	}
+
+	res := connect.NewResponse(&GetRequestByToUserIdResponse{
+		Id: request.ID(),
+		FromUserId: request.FromUserID(),
+		Status: RequestStatus(request.Status()),
+	})
+
+	return res, nil
+}
+
+func (presenter *presenter) GetRequestByFromUserId(
+	ctx context.Context,
+	req *connect.Request[GetRequestByFromUserIdRequest],
+)(*connect.Response[GetRequestByFromUserIdResponse], error) {
+	fmt.Println("Get request by from user id presenter")
+	userId, err := authPresenter.ValidateJWT(ctx, req.Header().Get("Authorization"))
+	if err != nil {
+		fmt.Println("Error in get request by from user id presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+
+	request, err := presenter.getRequestByFromUserUsecase.Execute(
+		ctx,
+		userId,
+	)
+
+	if err != nil {
+		fmt.Println("Error in get request by from user id presenter")
+		fmt.Println(err)
+		return nil, err
+	}
+
+	if request == nil {
+		res := connect.NewResponse(&GetRequestByFromUserIdResponse{})
+		return res, nil
+	}
+
+	res := connect.NewResponse(&GetRequestByFromUserIdResponse{
+		Id: request.ID(),
+		ToUserId: request.ToUserID(),
+		Status: RequestStatus(request.Status()),
 	})
 
 	return res, nil

@@ -8,12 +8,21 @@ service User {
     rpc AddUser(AddUserRequest) returns (AddUserResponse) {}
     rpc GetUserByMailAddress(GetUserByMailAddressRequest) returns (GetUserByMailAddressResponse) {}
     rpc GetCouple(GetCoupleRequest) returns (GetCoupleResponse) {}
+    rpc GetRequestByToUserId(GetRequestByToUserIdRequest) returns (GetRequestByToUserIdResponse) {}
+    rpc GetRequestByFromUserId(GetRequestByFromUserIdRequest) returns (GetRequestByFromUserIdResponse) {}
 }
 
 enum Gender {
     GENDER_UNKNOWN = 0;
     MAN = 1;
     WOMAN = 2;
+}
+
+enum RequestStatus {
+    REQUEST_STATUS_UNKNOWN = 0;
+    REQUEST_STATUS_PENDING = 1;
+    REQUEST_STATUS_ACCEPTED = 2;
+    REQUEST_STATUS_REJECTED = 3;
 }
 
 message AddUserRequest {
@@ -42,4 +51,22 @@ message GetCoupleRequest {
 
 message GetCoupleResponse {
     string coupleId = 1;
+}
+
+message GetRequestByToUserIdRequest {
+}
+
+message GetRequestByToUserIdResponse {
+    string id = 1;
+    string fromUserId = 2;
+    RequestStatus status = 3;
+}
+
+message GetRequestByFromUserIdRequest {
+}
+
+message GetRequestByFromUserIdResponse {
+    string id = 1;
+    string toUserId = 2;
+    RequestStatus status = 3;
 }

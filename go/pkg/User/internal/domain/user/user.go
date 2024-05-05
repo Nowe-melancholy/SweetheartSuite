@@ -30,7 +30,7 @@ func (u *User) Gender() common.Gender {
 
 func NewUser(id string, name string, mailAddress string, gender common.Gender) (*User, error) {
 	if id == "" {
-		return nil, errors.New("id cannot be empty")
+		return nil, errors.New("user id cannot be empty")
 	}
 
 	if name == "" {
